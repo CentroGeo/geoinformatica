@@ -1,0 +1,131 @@
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+\documentclass[10pt]{beamer}
+\usetheme[
+%%% option passed to the outer theme
+%    progressstyle=fixedCircCnt,   % fixedCircCnt, movingCircCnt (moving is deault)
+  ]{Feather}
+  
+% If you want to change the colors of the various elements in the theme, edit and uncomment the following lines
+
+% Change the bar colors:
+%\setbeamercolor{Feather}{fg=red!20,bg=red}
+
+% Change the color of the structural elements:
+%\setbeamercolor{structure}{fg=red}
+
+% Change the frame title text color:
+%\setbeamercolor{frametitle}{fg=blue}
+
+% Change the normal text color background:
+%\setbeamercolor{normal text}{fg=black,bg=gray!10}
+
+%-------------------------------------------------------
+% INCLUDE PACKAGES
+%-------------------------------------------------------
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+
+%-------------------------------------------------------
+% DEFFINING AND REDEFINING COMMANDS
+%-------------------------------------------------------
+
+% colored hyperlinks
+\newcommand{\chref}[2]{
+  \href{#1}{{\usebeamercolor[bg]{Feather}#2}}
+}
+
+%-------------------------------------------------------
+% INFORMATION IN THE TITLE PAGE
+%-------------------------------------------------------
+
+\title[] % [] is optional - is placed on the bottom of the sidebar on every slide
+{ % is placed on the title page
+      \textbf{Taller de Geoinformática}
+}
+
+\subtitle[The Feather Beamer Theme]
+{
+      \textbf{(Geoinformática II)}
+}
+
+\author[Pablo López Ramírez]
+{      Pablo López Ramírez \\
+      {\ttfamily pablo.lopez@centrogeo.edu.mx}
+}
+
+\institute[]
+{
+      CentroGeo\\
+      
+  
+  %there must be an empty line above this line - otherwise some unwanted space is added between the university and the country (I do not know why;( )
+}
+
+\date{\today}
+
+%-------------------------------------------------------
+% THE BODY OF THE PRESENTATION
+%-------------------------------------------------------
+
+\begin{document}
+
+%-------------------------------------------------------
+% THE TITLEPAGE
+%-------------------------------------------------------
+
+{\1% % this is the name of the PDF file for the background
+\begin{frame}[plain,noframenumbering] % the plain option removes the header from the title page, noframenumbering removes the numbering of this frame only
+  \titlepage % call the title page information from above
+\end{frame}}
+
+
+\begin{frame}{Content}{}
+\tableofcontents
+\end{frame}
+
+%-------------------------------------------------------
+\section{Introducción}
+%-------------------------------------------------------
+
+\begin{frame}{Introducción}
+%-------------------------------------------------------
+  El objetivo del curso es exponerlos a algunos temas más avanzados en Geoinformática.
+  No se espera que al terminar el curso todos sean capaces de desarrollar soluciones
+  sofisticadas, lo que se espera es que tengan un panorama general del desarrollo de
+  aplicaciones para manejar, analizar y visualizar información geográfica.
+  
+\end{frame}
+
+\begin{frame}{Introducción}
+%-------------------------------------------------------
+  En general, vamos a trabajar en Python, pero haremos algunas cosas en otros lenguajes
+  dependiendo de las necesidades.
+
+  Python, además de ser relatívamente fácil de aprender, es el lenguaje en el que se
+  extienden algunas de las herramientas más populares (ESRI, QGis)
+\end{frame}
+
+
+\section{Contenido del curso}
+\begin{frame}{Contenido}
+%-------------------------------------------------------
+
+  \begin{itemize}
+  \item Automatización
+  \item Extendiendo Arc: ArcPy
+  \item Desarrollo de Plugins para QGis
+  \item Modelos 3-D en QGis
+  \item Dependiendo del tiempo y sus intereses
+  \end{itemize}
+
+\end{frame}
+
+
+\end{document}
