@@ -1,0 +1,155 @@
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+\documentclass[10pt]{beamer}
+\usetheme[
+%%% option passed to the outer theme
+%    progressstyle=fixedCircCnt,   % fixedCircCnt, movingCircCnt (moving is deault)
+  ]{Feather}
+  
+% If you want to change the colors of the various elements in the theme, edit and uncomment the following lines
+
+% Change the bar colors:
+%\setbeamercolor{Feather}{fg=red!20,bg=red}
+
+% Change the color of the structural elements:
+%\setbeamercolor{structure}{fg=red}
+
+% Change the frame title text color:
+%\setbeamercolor{frametitle}{fg=blue}
+
+% Change the normal text color background:
+%\setbeamercolor{normal text}{fg=black,bg=gray!10}
+
+%-------------------------------------------------------
+% INCLUDE PACKAGES
+%-------------------------------------------------------
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+
+%-------------------------------------------------------
+% DEFFINING AND REDEFINING COMMANDS
+%-------------------------------------------------------
+
+% colored hyperlinks
+\newcommand{\chref}[2]{
+  \href{#1}{{\usebeamercolor[bg]{Feather}#2}}
+}
+
+%-------------------------------------------------------
+% INFORMATION IN THE TITLE PAGE
+%-------------------------------------------------------
+
+\title[] % [] is optional - is placed on the bottom of the sidebar on every slide
+{ % is placed on the title page
+      \textbf{Python}
+}
+
+\subtitle[Geoinformática]
+{
+      \textbf{Configurando el entorno}
+}
+
+\setbeamerfont{author}{size=\scriptsize,series=\bfseries,parent=structure}
+\author[JG,PLR,RTM]{Josafat Guerero \and Pablo López Ramírez
+                    \and Rodrigo Tapia McClung}
+
+\institute[CentroGeo]{\inst{1} CentroGeo}
+
+\institute[]
+{
+      CentroGeo\\
+      
+  
+  %there must be an empty line above this line - otherwise some unwanted space is added between the university and the country (I do not know why;( )
+}
+
+\date{\today}
+
+%-------------------------------------------------------
+% THE BODY OF THE PRESENTATION
+%-------------------------------------------------------
+
+\begin{document}
+
+%-------------------------------------------------------
+% THE TITLEPAGE
+%-------------------------------------------------------
+
+
+\begin{frame}[plain,noframenumbering] % the plain option removes the header from the title page, noframenumbering removes the numbering of this frame only
+  \titlepage % call the title page information from above
+\end{frame}
+
+
+\begin{frame}{Contenido}{}
+\tableofcontents
+\end{frame}
+
+%-------------------------------------------------------
+\section{Introducción}
+%-------------------------------------------------------
+
+\begin{frame}{Introducción}
+  % -------------------------------------------------------
+  \begin{block}{}
+    Para estos talleres vamos a usar una distribución de Python llamada
+    \textbf{Anaconda}
+  \end{block}\pause
+  
+  \begin{block}{}
+    \textbf{Anaconda} hace mucho más fácil el proceso de instalar paquetes y sus
+    dependencias. Se encarga también de instalar los paquetes \textit{binarios}
+    necesarios (¿recuerdan GDAL?)
+  \end{block}
+
+\end{frame}
+
+
+%-------------------------------------------------------
+\section{Conda}
+% -------------------------------------------------------
+
+\begin{frame}{Conda}
+%-------------------------------------------------------
+  \begin{block}{}
+    Conda es el manejador de paquetes de \textbf{Anaconda}
+  \end{block}\pause
+  
+  \begin{block}{}
+    Es análogo a \textit{pip} pero además de manejar las dependencias de Python,
+    también se encarga de dependencias \textit{binarias}, lo que facilita el
+    proceso de instalación de librerías.
+  \end{block}
+\end{frame}
+
+
+%-------------------------------------------------------
+\section{Instalación}
+% -------------------------------------------------------
+
+\begin{frame}{Instalación}
+%-------------------------------------------------------
+
+  \begin{block}{}
+    \textbf{Anaconda} contiene una distribución completa de Python científico,
+    para ahorrar tiempo en la instalación, vamos a utilizar la distribución
+    mínima: \textbf{Miniconda}
+  \end{block}\pause
+
+  \begin{block}{}
+    Para instalar miniconda, visiten la página \chref{https://conda.io/miniconda.html}{https://conda.io/miniconda.html} y seleccionen la plataforma que requieran (windoze 64).
+
+    Hagan doble click en el instalador y sigan las instrucciones
+  \end{block}
+
+\end{frame}
+
+
+
+\end{document}
