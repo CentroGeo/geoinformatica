@@ -1,8 +1,4 @@
 
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:
 \documentclass[10pt]{beamer}
 \usetheme[
 %%% option passed to the outer theme
@@ -47,12 +43,12 @@
 
 \title[] % [] is optional - is placed on the bottom of the sidebar on every slide
 { % is placed on the title page
-      \textbf{Python}
+      \textbf{Taller de Geoinformática}
 }
 
 \subtitle[Geoinformática]
 {
-      \textbf{Configurando el entorno}
+      \textbf{(Geoinformática II)}
 }
 
 \setbeamerfont{author}{size=\scriptsize,series=\bfseries,parent=structure}
@@ -60,6 +56,16 @@
                     \and Rodrigo Tapia McClung}
 
 \institute[CentroGeo]{\inst{1} CentroGeo}
+
+% \author[Pablo López Ramírez]
+% {      Josafat Guerero
+%        Pablo López Ramírez
+%        Rodrigo Tapia McClung \\
+       
+%        {\ttfamily pablo.lopez@centrogeo.edu.mx}
+%        {\ttfamily josafatisai@gmail.com}
+%        {\ttfamily rtapia@centrogeo.edu.mx}
+% }
 
 \institute[]
 {
@@ -98,58 +104,93 @@
 \begin{frame}{Introducción}
   % -------------------------------------------------------
   \begin{block}{}
-    Para estos talleres vamos a usar una distribución de Python llamada
-    \textbf{Anaconda}
-  \end{block}\pause
-  
-  \begin{block}{}
-    \textbf{Anaconda} hace mucho más fácil el proceso de instalar paquetes y sus
-    dependencias. Se encarga también de instalar los paquetes \textit{binarios}
-    necesarios (¿recuerdan GDAL?)
+    El objetivo del curso es exponerlos a algunos temas más avanzados
+    en Geoinformática.
+    
+    No se espera que al terminar el curso todos sean capaces de desarrollar soluciones
+    sofisticadas, lo que se espera es que tengan un panorama general del desarrollo de
+    aplicaciones para manejar, analizar y visualizar información geográfica.
   \end{block}
-
 \end{frame}
 
+\begin{frame}{Introducción}
+%-------------------------------------------------------
+  \begin{block}{}
+    Vamos a trabajar con tres herramientas: Python, Javascript y R.
+
+    Durante el curso haremos algunas cosas que ya han visto en otras materias, pero
+    aquí el foco está en usar diferentes tecnologías para alcanzar los mismos
+    objetivos.
+
+  \end{block}
+\end{frame}
 
 %-------------------------------------------------------
-\section{Conda}
+\section{Contenido del curso}
 % -------------------------------------------------------
 
-\begin{frame}{Conda}
+\begin{frame}{Contenido}
 %-------------------------------------------------------
-  \begin{block}{}
-    Conda es el manejador de paquetes de \textbf{Anaconda}
-  \end{block}\pause
-  
-  \begin{block}{}
-    Es análogo a \textit{pip} pero además de manejar las dependencias de Python,
-    también se encarga de dependencias \textit{binarias}, lo que facilita el
-    proceso de instalación de librerías.
-  \end{block}
+
+  \begin{itemize}
+  \item \textbf{Python:} Cálculos en vecindades 
+  \item \textbf{QGis:} Modelos tridimensionales
+  \item \textbf{R:} Estadística espacial
+  \item \textbf{Javascript:} Mapas y gráficas en D3.js
+  \item \textbf{Python:} ArcPy, extendiendo ArcMap
+  \end{itemize}
+
 \end{frame}
 
 
 %-------------------------------------------------------
-\section{Instalación}
+\section{Evaluación}
 % -------------------------------------------------------
 
-\begin{frame}{Instalación}
+\begin{frame}{Evaluación}
 %-------------------------------------------------------
 
-  \begin{block}{}
-    \textbf{Anaconda} contiene una distribución completa de Python científico,
-    para ahorrar tiempo en la instalación, vamos a utilizar la distribución
-    mínima: \textbf{Miniconda}
-  \end{block}\pause
+  \begin{itemize}
+  \item Tareas (en equipos de 3 personas) 20%
+  \item Examen final (individual) 30%
+  \item Proyecto final (en equipos de 3 personas) 50%
+  \end{itemize}\pause
 
   \begin{block}{}
-    Para instalar miniconda, visiten la página \chref{https://conda.io/miniconda.html}{https://conda.io/miniconda.html} y seleccionen la plataforma que requieran (windoze 64).
+    Proyecto final:
 
-    Hagan doble click en el instalador y sigan las instrucciones
+    adquirir datos -> transformarlos -> analizarlos -> representarlos
   \end{block}
 
 \end{frame}
 
+
+%-------------------------------------------------------
+\section{Organización}
+% -------------------------------------------------------
+
+\begin{frame}{Organización}
+%-------------------------------------------------------
+
+  \begin{block}{}
+    El curso tiene su propio sitio de internet, es necesario que
+    obtengan una cuenta de estudiante en \chref{Canvas}{https://canvas.instructure.com/}
+  \end{block}\pause
+
+  \begin{block}{}
+    Después de obtener su cuenta, regístrense en el curso haciendo click
+    en la siguiente liga:
+
+    \chref{https://canvas.instructure.com/enroll/RLH6FT}{https://canvas.instructure.com/enroll/RLH6FT}
+  \end{block}
+
+
+\end{frame}
 
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
