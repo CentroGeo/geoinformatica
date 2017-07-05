@@ -50,15 +50,26 @@
       \textbf{Taller de Geoinformática}
 }
 
-\subtitle[The Feather Beamer Theme]
+\subtitle[Geoinformática]
 {
       \textbf{(Geoinformática II)}
 }
 
-\author[Pablo López Ramírez]
-{      Pablo López Ramírez \\
-      {\ttfamily pablo.lopez@centrogeo.edu.mx}
-}
+\setbeamerfont{author}{size=\scriptsize,series=\bfseries,parent=structure}
+\author[JG,PLR,RTM]{Josafat Guerero \and Pablo López Ramírez
+                    \and Rodrigo Tapia McClung}
+
+\institute[CentroGeo]{\inst{1} CentroGeo}
+
+% \author[Pablo López Ramírez]
+% {      Josafat Guerero
+%        Pablo López Ramírez
+%        Rodrigo Tapia McClung \\
+       
+%        {\ttfamily pablo.lopez@centrogeo.edu.mx}
+%        {\ttfamily josafatisai@gmail.com}
+%        {\ttfamily rtapia@centrogeo.edu.mx}
+% }
 
 \institute[]
 {
@@ -80,10 +91,10 @@
 % THE TITLEPAGE
 %-------------------------------------------------------
 
-{\1% % this is the name of the PDF file for the background
+
 \begin{frame}[plain,noframenumbering] % the plain option removes the header from the title page, noframenumbering removes the numbering of this frame only
   \titlepage % call the title page information from above
-\end{frame}}
+\end{frame}
 
 
 \begin{frame}{Contenido}{}
@@ -95,37 +106,68 @@
 %-------------------------------------------------------
 
 \begin{frame}{Introducción}
-%-------------------------------------------------------
-  El objetivo del curso es exponerlos a algunos temas más avanzados en Geoinformática.
-  No se espera que al terminar el curso todos sean capaces de desarrollar soluciones
-  sofisticadas, lo que se espera es que tengan un panorama general del desarrollo de
-  aplicaciones para manejar, analizar y visualizar información geográfica.
-  
+  % -------------------------------------------------------
+  \begin{block}{}
+    El objetivo del curso es exponerlos a algunos temas más avanzados
+    en Geoinformática.
+    
+    No se espera que al terminar el curso todos sean capaces de desarrollar soluciones
+    sofisticadas, lo que se espera es que tengan un panorama general del desarrollo de
+    aplicaciones para manejar, analizar y visualizar información geográfica.
+  \end{block}
 \end{frame}
 
 \begin{frame}{Introducción}
 %-------------------------------------------------------
-  En general, vamos a trabajar en Python, pero haremos algunas cosas en otros lenguajes
-  dependiendo de las necesidades.
+  \begin{block}{}
+    Vamos a trabajar con tres herramientas: Python, Javascript y R.
 
-  Python, además de ser relativamente fácil de aprender, es el lenguaje en el que se
-  extienden algunas de las herramientas más populares (ESRI, QGis)
+    Durante el curso haremos algunas cosas que ya han visto en otras materias, pero
+    aquí el foco está en usar diferentes tecnologías para alcanzar los mismos
+    objetivos.
+
+  \end{block}
 \end{frame}
 
-
+%-------------------------------------------------------
 \section{Contenido del curso}
+% -------------------------------------------------------
+
 \begin{frame}{Contenido}
 %-------------------------------------------------------
 
   \begin{itemize}
-  \item Automatización
-  \item Extendiendo Arc: ArcPy
-  \item Desarrollo de Plugins para QGis
-  \item Modelos 3-D en Qgis
-  \item Dependiendo del tiempo y sus intereses
+  \item \textbf{Python:} Cálculos en vecindades 
+  \item \textbf{QGis:} Modelos tridimensionales
+  \item \textbf{R:} Estadística espacial
+  \item \textbf{Javascript:} Mapas y gráficas en D3.js
+  \item \textbf{Python:} ArcPy, extendiendo ArcMap
   \end{itemize}
 
 \end{frame}
+
+
+%-------------------------------------------------------
+\section{Evaluación}
+% -------------------------------------------------------
+
+\begin{frame}{Evaluación}
+%-------------------------------------------------------
+
+  \begin{itemize}
+  \item Tareas (en equipos de 3 personas)
+  \item Examen final (individual)
+  \item Proyecto final (en equipos de 3 personas)
+  \end{itemize}\pause
+
+  \begin{block}{}
+    Proyecto final:
+
+    adquirir datos -> transformarlos -> analizarlos -> representarlos
+  \end{block}
+
+\end{frame}
+
 
 
 \end{document}
