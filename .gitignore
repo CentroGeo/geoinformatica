@@ -368,3 +368,5 @@ flycheck_*.el
 .dir-locals.el
 
 auto/
+vecindades_python/datos/
+
