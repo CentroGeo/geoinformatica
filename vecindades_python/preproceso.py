@@ -24,13 +24,14 @@ def concatena_claves(x):
 
 def preprocesa(puntos, poligonos):
     """Procesa los datos y regresa el merge."""
-    puntos['clase'] = puntos['codigo_act'].apply(clasifica)
+    puntos.loc[:, 'clase'] = puntos['codigo_act'].apply(clasifica)
     puntos = puntos.loc[puntos['clase'].notnull()]
-    puntos['cve_geo'] = puntos.apply(concatena_claves, axis=1)
+    puntos.loc[:, 'cve_geo'] = puntos.apply(concatena_claves, axis=1)
     variables = puntos[['cve_geo', 'clase']]
     variables = pd.get_dummies(variables, columns=['clase'])
     por_ageb = variables.groupby(['cve_geo']).sum()
     poligonos = poligonos[['CVEGEO', 'geometry']]
     usos_suelo = poligonos.merge(por_ageb, left_on='CVEGEO',
                                  right_index=True, how='inner')
+    print('si')
     return usos_suelo
