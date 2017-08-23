@@ -25,7 +25,16 @@ Un SVG tiene ciertos elementos básicos como:
 - Paths
 - Text
 
-El _path_ tiene muchos modificadores:
+Y cada uno tiene _atributos_. Un ejemplo de un SVG sencillo puede ser algo como:
+
+```html
+<svg width="100" height="100">
+  <circle cx="50" cy="50" r="40" stroke="red" stroke-width="4" fill="blue" />
+</svg>
+```
+<img src="https://centrogeo.github.io/geoinformatica/d3/circle.svg"/>
+
+El _path_, que sirve para dibujar figuras arbitrarias, es el único que tiene muchos modificadores:
 * M = moveto
 * L = lineto
 * H = horizontal lineto
@@ -36,16 +45,6 @@ El _path_ tiene muchos modificadores:
 * T = smooth quadratic Bézier curveto
 * A = elliptical Arc
 * Z = closepath
-
-Un ejemplo de un SVG sencillo puede ser algo como:
-
-```html
-<svg width="100" height="100">
-  <circle cx="50" cy="50" r="40" stroke="red" stroke-width="4" fill="blue" />
-</svg>
-```
-<img src="https://centrogeo.github.io/geoinformatica/d3/circle.svg"/>
-
 Un ejemplo un poco más elaborado puede ser:
 
 ```html
@@ -72,3 +71,16 @@ Un ejemplo un poco más elaborado puede ser:
 </svg>
 ```
 <img src="https://centrogeo.github.io/geoinformatica/d3/path.svg"/>
+
+Te puedes dar cuenta que en el código de arriba hay unas líneas qwue dicen
+```html
+<g stroke="black" stroke-width="3" fill="black">
+...
+</g>
+```
+Esa etiqueta define un _grupo_. Todo lo que esté contenido dentro de la etiqueta
+tendrá las propiedades definidas en ella. Esto se conoce como los elementos **heredan**
+las propiedades generales. Dicho de otro modo, el `<g>` es el padre de los elementos
+contenidos en él (que son sus _hijos_).
+
+<img src="https://centrogeo.github.io/geoinformatica/d3/dudas.svg"/>
