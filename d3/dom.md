@@ -16,4 +16,8 @@ Con este modelo, JavaScript puede acceder a los elementos del HTML, reaccionar a
 * reaccionar a todos los eventos de HTML que existan en la página
 * crear nuevos eventos de HTML en la página
 
-<img src="https://www.w3schools.com/js/pic_htmltree.gif" alt="https://www.w3schools.com/js/js_htmldom.asp"/>
+<img src="https://www.w3schools.com/js/pic_htmltree.gif" alt="https://www.w3schools.com/js/js_htmldom.asp" title="https://www.w3schools.com/js/js_htmldom.asp"/>
+
+## Y ¿cómo accedo al DOM?
+
+En un browser moderno usa la tecla **F12** o **Shift+Ctrl+J** o **Shift+Ctrl+I** o en el menú del navegador escoge "Herramientas de desarrollador" o "Developer Tools".
