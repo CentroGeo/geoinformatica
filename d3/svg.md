@@ -84,5 +84,3 @@ las propiedades generales. Dicho de otro modo, el `<g>` es el padre de los eleme
 contenidos en él (que son sus _hijos_).
 
 <img src="https://centrogeo.github.io/geoinformatica/d3/dudas.svg"/>
-
-[DOM](./DOM.md)
