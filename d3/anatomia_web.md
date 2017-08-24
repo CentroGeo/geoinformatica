@@ -11,15 +11,15 @@ Aquí tenemos un ejemplo súper simple de un HTML, cópialo y pégalo en un arch
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-<title>El título</title>
-</head>
-<body>
+    <head>
+        <title>El título</title>
+    </head>
+    <body>
 
-<h1>Un encabezado</h1>
-<p>Y algo interesante que decir.</p>
+        <h1>Un encabezado</h1>
+        <p>Y algo interesante que decir.</p>
 
-</body>
+    </body>
 </html>
 ```
 Como puedes ver, el _estilo_ de la página es muy _austero_, esto es porque en el modelo de desarrollo Web el estilo, la organización y el contenido están separados: la organización es el HTML, el contenido es lo que está adentro de las etiquetas y el estilo, el estilo se cuece aparte...
@@ -49,16 +49,16 @@ Los encabezados que aparecen a la izquierda de las llaves se llaman _selectores_
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-<title>El título</title>
-<link rel="stylesheet" href="estilo.css">
-</head>
-<body>
+    <head>
+        <title>El título</title>
+        <link rel="stylesheet" href="estilo.css">
+    </head>
+    <body>
 
-<h1>Un encabezado</h1>
-<p>Y algo interesante que decir.</p>
+        <h1>Un encabezado</h1>
+        <p>Y algo interesante que decir.</p>
 
-</body>
+    </body>
 </html>
 ```
 Copia pega el CSS de arriba en un archivo y guárdalo como estilo.css. Ahora vuelve a abrir el HTML con el navegador.
@@ -98,5 +98,55 @@ En resumen, el DOM es la representación que nos permite interactuar, a través 
 
 [Javascript](https://www.w3schools.com/js/) es el lenguaje de programación para los navegadores, es la forma de interactuar programáticamente con el DOM. Javascript dota a las páginas web de las capacidades necesarias para la interactividad a la que estamos acostumbrados, sin el, todas las páginas serían [estáticas](http://toastytech.com/evil/).
 
-En general, el código de javascript se incluye de la misma forma en la que incluimos el CSS, sin embargo, a través de las Herramientas de Desarrollo, podemos también escribir código, seleccionando la consola.
+En general, el código de javascript se incluye de la misma forma en la que incluimos el CSS, sin embargo, a través de las Herramientas de Desarrollo, podemos también escribir código usando la _consola_.
 
+Ahora vamos a hacer un pequeño ejercicio, usando la consola de Javascript, para modificar el DOM y algunas propiedades de sus elementos. Para esto, vamos a editar nuestro HTML base para incluir clases e identificadores en los elementos. Estos atributos nos permiten seleccionar grupos de elementos para actuar sobre ellos usando Javascript o CSS.
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>El título</title>
+        <link rel="stylesheet" href="estilo.css">
+    </head>
+    <body>
+
+        <h1 id="encabezado">Un encabezado</h1>
+        <p class="par">Y algo interesante que decir.</p>
+        <p class="par">O a lo mejor no tanto</p>
+        <p id="sin_clase">!Yo no tengo clase!</p>
+    </body>
+</html>
+```
+Fíjense que ahora tenemos atributos en algunas etiquetas, `id` representa un identificador único para un elemento y `class` es un identificador para un conjunto de elementos. Ahora vamos a interactuar con ellos usando Javascript:
+
+```javascript
+
+var e = document.getElementById("encabezado"); // seleccionamos el elemento con id "encabezado"
+e.style.color = 'red' \\ Cambiamos el estilo!
+
+var ps = document.getElementsByClassName("par"); // seleccionamos todos los elementos con la clase par
+
+var i; 
+for (i = 0; i < ps.length; i++) { //iteramos sobre los elementos para cambiar el estilo
+    ps[i].style.backgroundColor = "white";
+}
+
+```
+Fíjense cómo `document.getElementById` nos regresa un único elemento, mientras que `document.getElementsByClassName` regresa un _array_ de elementos, esto es porque los ids son únicos (ojo, nadie va a checar que sean únicos, si no tenemos cuidado, cosas horribles pueden pasar), mientras que la clase está hecha para agrupar elementos.
+
+Ahora, para terminar con esta introducción, vamos a agregar un elemento al DOM:
+
+```javascript
+
+var nodo = document.createElement("UL")  //Creo un nodo del tipo "UL"
+var j;
+for (j = 0; j < 4; j++) { 
+    var hijo = document.createElement("LI")
+    var textnode = document.createTextNode("Elemento " + j);
+    hijo.appendChild(textnode);
+    nodo.appendChild(hijo);
+}
+document.getElementById("sinClase").appendChild(nodo);
+
+```
