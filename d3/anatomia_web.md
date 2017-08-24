@@ -88,7 +88,7 @@ Con este modelo, JavaScript puede acceder a los elementos del HTML, reaccionar a
 
 En un browser moderno usa la tecla **F12** o **Shift+Ctrl+J** o **Shift+Ctrl+I** o en el menú del navegador escoge "Herramientas de desarrollador" o "Developer Tools".
 
-<img src="./img/dev_tools.png" />
+<a href = "./img/dev_tools.png"><img src="./img/dev_tools.png" /></a>
 
 Estas herramientas nos permiten identificar elementos del DOM e interactuar con ellos, por ejemplo cambiando sus propiedades o incluso moviéndolos de lugar. Inténtalo con esta página.
 
