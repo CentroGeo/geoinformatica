@@ -123,7 +123,7 @@ Fíjense que ahora tenemos atributos en algunas etiquetas, `id` representa un id
 ```javascript
 
 var e = document.getElementById("encabezado"); // seleccionamos el elemento con id "encabezado"
-e.style.color = 'red' \\ Cambiamos el estilo!
+e.style.color = 'red' // Cambiamos el estilo!
 
 var ps = document.getElementsByClassName("par"); // seleccionamos todos los elementos con la clase par
 
