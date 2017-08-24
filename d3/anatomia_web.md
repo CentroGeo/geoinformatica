@@ -1,6 +1,6 @@
-# La anatomía de una página Web
+# La anatomía de una página web
 
-Aquí vamos a hablar un poco de cómo está estructurada una página Web. La idea no es que aprendan a hacer páginas sino que entiendan cuáles son los principales elementos que la conforman y cómo interactúan entre ellos.
+Aquí vamos a hablar un poco de cómo está estructurada una página web. La idea no es que aprendan a hacer páginas sino que entiendan cuáles son los principales elementos que la conforman y cómo interactúan entre ellos.
 
 ## HTML
 
@@ -22,7 +22,7 @@ Aquí tenemos un ejemplo súper simple de un HTML, cópialo y pégalo en un arch
     </body>
 </html>
 ```
-Como puedes ver, el _estilo_ de la página es muy _austero_, esto es porque en el modelo de desarrollo Web el estilo, la organización y el contenido están separados: la organización es el HTML, el contenido es lo que está adentro de las etiquetas y el estilo, el estilo se cuece aparte...
+Como puedes ver, el _estilo_ de la página es muy _austero_, esto es porque en el modelo de desarrollo web el estilo, la organización y el contenido están separados: la organización es el HTML, el contenido es lo que está adentro de las etiquetas y el estilo, el estilo se cuece aparte...
 
 ## CSS
 
@@ -44,7 +44,7 @@ p {
 }
 ```
 
-Los encabezados que aparecen a la izquierda de las llaves se llaman _selectores_ y permiten seleccio9nar elementos ya sea por tipo, clase, identificador o relación. Para ver como funciona, vamos a agregarlo a nuestra página de ejemplo. Edita el HTML para que se vea así:
+Los encabezados que aparecen a la izquierda de las llaves se llaman _selectores_ y permiten seleccionar elementos ya sea por tipo, clase, identificador o relación. Para ver como funciona, vamos a agregarlo a nuestra página de ejemplo. Edita el HTML para que se vea así:
 
 ```html
 <!DOCTYPE html>
