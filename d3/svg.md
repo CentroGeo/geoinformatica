@@ -1,20 +1,6 @@
-## D3.js
+## SVG: Scalable Vector Graphics
 
-Este tutorial trata sobre el uso de D3 para hacer gráficas dinámicas en web.
-
-Los elementos principales para poder utilizar D3, requerimos ciertos elementos básicos:
-
-- Navegadores web
-- HTML
-- CSS
-- Javascript
-
-Estos elementos los pueden recordar de sus clsaes de Leaflet...
-Pero lo que hay que rescatar es que se usan muchas **etiquetas**.
-
-Luego hay que saber qué es un [XML](https://www.w3schools.com/Xml/) y, en particular, un [SVG](https://www.w3schools.com/graphics/svg_intro.asp).
-
-En corto, un SVG es un XML que describe o define un dibujo vectorial.
+En breve, un [SVG](https://www.w3schools.com/graphics/svg_intro.asp) es un [XML](https://www.w3schools.com/Xml/) que describe o define un dibujo vectorial. (NB: leer esos links)
 
 Un SVG tiene ciertos elementos básicos como:
 - Rectángulos
@@ -84,3 +70,5 @@ las propiedades generales. Dicho de otro modo, el `<g>` es el padre de los eleme
 contenidos en él (que son sus _hijos_).
 
 <img src="https://centrogeo.github.io/geoinformatica/d3/dudas.svg"/>
+
+Regresar a [1. La anatomía de una página Web](anatomia_web.md) | Continuar a [3. Introducción práctica a D3](d3_1.md)
