@@ -86,7 +86,7 @@ Con este modelo, JavaScript puede acceder a los elementos del HTML, reaccionar a
 
 ## Y ¿cómo accedo al DOM?
 
-En un browser moderno usa la tecla **F12** o **Shift+Ctrl+J** o **Shift+Ctrl+I** o en el menú del navegador escoge "Herramientas de desarrollador" o "Developer tools".
+Dependiendo del navegador, usa la tecla **F12** o **Shift+Ctrl+J** o **Shift+Ctrl+I** o en el menú del navegador escoge "Herramientas de desarrollador" o "Developer tools".
 
 <a href = "./img/dev_tools.png"><img src="./img/dev_tools.png" /></a>
 
@@ -131,12 +131,10 @@ var i;
 for (i = 0; i < ps.length; i++) { //iteramos sobre los elementos para cambiar el estilo
     ps[i].style.backgroundColor = "white";
 }
-
 ```
 Fíjense cómo `document.getElementById` nos regresa un único elemento, mientras que `document.getElementsByClassName` regresa un _array_ de elementos, esto es porque los ids son únicos (ojo, nadie va a checar que sean únicos, si no tenemos cuidado, cosas horribles pueden pasar), mientras que la clase está hecha para agrupar elementos.
 
 Ahora, para terminar con esta introducción, vamos a agregar un elemento al DOM:
-
 ```javascript
 
 var nodo = document.createElement("UL")  //Creo un nodo del tipo "UL"
@@ -148,5 +146,6 @@ for (j = 0; j < 4; j++) {
     nodo.appendChild(hijo);
 }
 document.getElementById("sinClase").appendChild(nodo);
-
 ```
+
+Continuar a [2. Los SVGs](svg.md)
