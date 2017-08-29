@@ -16,6 +16,5 @@ Los temas que vamos a tratar en el taller son:
 * Introducción práctica a D3
     * [Parte 1: HTML](d3_1.md)
     * [Parte 2: con SVG](d3_2.md)
-* [Selecciones](d3_selecciones.md)
-* [General Update Pattern](d3_gup.md)
+* [Selecciones Joins y General Update Pattern](d3_selecciones.md)
 * [Ejercicio práctico con D3](d3_ex.md)
