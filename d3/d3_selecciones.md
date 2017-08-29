@@ -77,8 +77,6 @@ quedan agrupados de acuerdo a su estructura en el DOM. Consideremos este caso un
 
 ```html
 <!DOCTYPE html>
-
-</style>
 <body>
 <table style="width:100%">
   <tr>
@@ -114,12 +112,71 @@ sobre cada una de esas listas (es decir, sobre las filas) pero, ¿Qué pása si 
 ```javascript
 td = d3.selectAll("tr").selectAll("td")
 ```
-Esta selección nos regresa tres grupos, uno para cada fila, como el primer grupo es el encabezado de la tabla, 
+Esta selección nos regresa tres grupos, uno para cada fila. Como el primer grupo es el encabezado de la tabla, 
 no contiene elementos, los otros dos grupos contienen, cada uno, la lista de nodos con los datos para cada celda de
 la tabla.
 
+En conclusión, las selecciones **siempre** regresan grupos y estos grupos mantienen la esructura lógica del DOM. 
+
+Ahora vamos a ver cómo funciona esto cuando lo empezamos a ligar con datos, empecemos con el siguiente HTML que contiene un svg con tres círculos:
+
+```html
+<!DOCTYPE html>
+<body>
+  <svg width="720" height="120">
+    <circle cx="40" cy="60" r="10"></circle>
+    <circle cx="80" cy="60" r="10"></circle>
+    <circle cx="120" cy="60" r="10"></circle>
+  </svg>
+</body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+</html>
+```
+Como ya vimos, es fácil cambiar sus propiedades con D3.js:
+
+```javascript
+var circle = d3.selectAll("circle");
+circle.style("fill", "steelblue");
+circle.attr("r", 30);
+```
+En el taller anterior, vimos que podemos cambiar los atributos de acuerdo al resultado de una función:
+
+```javascript
+circle.attr("cx", function() { return Math.random() * 720; });
+```
+Ahora vamos a unir unos datos a nuestros círculos y cambiar el tamaño de acuerdo a los datos:
+
+```javascript
+datos = [32, 57, 112];
+circle.data(datos);
+circle.attr("r", function(d) { return Math.sqrt(d); });
+```
+
+Aquí es donde la _magia_ de D3 se empieza a notar: cuando hacemos `circle.data(datos)`, estamos ligando cada uno de los circulos con un valor del arreglo de datos (el `datum` de cada círculo), entonces, cuando le damos valor al atributo "r" la función se ejecuta una vez por cada elemento que tenga un dato ligado: es un `for` implícito.
+
+En este ejemplo, tenemos el mismo número de círcilos que elementos en el arreglo de datos, pero ¿qué pasaría si tenemos más datos que círculos? Aquí es donde entra la selección `enter`. Antes de continuar, recarga la página de forma que tengas los tres círculos negros con los que empezamos.
+
+```javascript
+datos = [32, 57, 112, 33];
+var svg = d3.select("svg");
+var circle = svg.selectAll("circle").data(datos)
+var circleEnter = circle.enter().append("circle");
+```
+Como pueden ver, `circelEnter` contiene un grupo con un elemento: ¡el círculo que no existe en nuestro dibujo! Vamos a pintarlo:
 
 
+```javascript
+circleEnter.attr("cy", 60);
+circleEnter.attr("cx", function(d, i) { return i * 100 + 30; });
+circleEnter.attr("r", function(d) { return Math.sqrt(d); });
+```
 
+Fíjense en la linea `circleEnter.attr("cx", function(d, i) { return i * 100 + 30; })`, ahí estamos diceiendo que, para cada elemento de la selección `enter` la coordenada `x` se recorra a la derecha una cantidad de unidades que depende del índice `i` del elemento. Intenten ahora ligar un arreglo de datos con más de cuatro elementos.
 
+Hasta aquí vimos el caso en el que tenemos más datos que elementos en el DOM, pero en general, cuando unimos un nuevo conjunto de datos a una selección vamos a tener grupos:
 
+<img src="https://centrogeo.github.io/geoinformatica/d3/enter_update_exit.svg"/>
+
+En el cntreo del diagrama tenemos la selección `update`: los datos que ya están unidos a elementos del DOM, del lado izquierdo los datos que todavía no tienen elemento creado (`enter`) y del lado derecho están los elementos que ya no quedan unidos a ningún elemento del DOM, la selección `exit`. Estos son los tres elementos que permiten la actualización dinámica de las gráficas en D3.
+
+## General Update Pattern
