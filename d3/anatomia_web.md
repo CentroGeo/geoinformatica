@@ -148,4 +148,4 @@ for (j = 0; j < 4; j++) {
 document.getElementById("sinClase").appendChild(nodo);
 ```
 
-Continuar a [2. Los SVGs](svg.md)
+Continuar a [Los SVGs](svg.md)
