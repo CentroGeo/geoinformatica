@@ -71,4 +71,4 @@ contenidos en él (que son sus _hijos_).
 
 <img src="https://centrogeo.github.io/geoinformatica/d3/dudas.svg"/>
 
-Regresar a [1. La anatomía de una página Web](anatomia_web.md) | Continuar a [3. Introducción práctica a D3](d3_1.md)
+Regresar a [La anatomía de una página Web](anatomia_web.md) | Continuar a [Introducción práctica a D3](d3_1.md)
