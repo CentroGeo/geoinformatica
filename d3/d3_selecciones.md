@@ -180,3 +180,7 @@ Hasta aquí vimos el caso en el que tenemos más datos que elementos en el DOM, 
 En el centro del diagrama tenemos la selección `update`: los datos que ya están unidos a elementos del DOM, del lado izquierdo los datos que todavía no tienen elemento creado (`enter`) y del lado derecho están los elementos que ya no quedan unidos a ningún elemento del DOM, la selección `exit`. Estos son los tres elementos que permiten la actualización dinámica de las gráficas en D3.
 
 ## General Update Pattern
+
+El Patrón General de Actualización (GUP) es, junto con la unión de datos, la base de D3.js. Es a través del GUP como se implementa la dinámica de las visualizaciones: reaccionar a nuevos datos, input del usuario, etcétera.
+
+En la sección anterior vimos como se puede ligar un conjunto de datos a una selección y cómo, cuando no tenemos datos previos, nuestros datos quedan ligados en una selección especial llamada `enter`. También comenzamos a ver lo que sucede cuando _actualizamos_ los datos de una selección y describimos los tres casos posibles: `enter`, `update` y `exit`. Ahora, vamos a trabajar con un caso sencillo pero que explícitamente maneja las tres selecciones.
