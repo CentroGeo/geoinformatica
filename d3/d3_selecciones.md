@@ -183,4 +183,79 @@ En el centro del diagrama tenemos la selección `update`: los datos que ya está
 
 El Patrón General de Actualización (GUP) es, junto con la unión de datos, la base de D3.js. Es a través del GUP como se implementa la dinámica de las visualizaciones: reaccionar a nuevos datos, input del usuario, etcétera.
 
-En la sección anterior vimos como se puede ligar un conjunto de datos a una selección y cómo, cuando no tenemos datos previos, nuestros datos quedan ligados en una selección especial llamada `enter`. También comenzamos a ver lo que sucede cuando _actualizamos_ los datos de una selección y describimos los tres casos posibles: `enter`, `update` y `exit`. Ahora, vamos a trabajar con un caso sencillo pero que explícitamente maneja las tres selecciones.
+En la sección anterior vimos cómo se puede ligar un conjunto de datos a una selección y cómo, cuando no tenemos datos previos, nuestros datos quedan ligados en una selección especial llamada `enter`. También comenzamos a ver lo que sucede cuando _actualizamos_ los datos de una selección y describimos los tres casos posibles: `enter`, `update` y `exit`. Ahora, vamos a trabajar con un caso sencillo pero que explícitamente maneja las tres selecciones.
+
+Vamos a comenzar con un HTML que contiene únicamente un `div` donde vamos a albergar nustra _gráfica_:
+
+```html
+<!DOCTYPE html>
+<body>
+  <div id="contenedor"></div>
+</body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+</html>
+```
+
+Ahora, vamos a crear un svg adentro de nuestro contenedor, agregar elementos al svg y ligarlos a un conjunto de datos:
+
+```javascript
+datos = [{"x": 25, "y": 25}, {"x": 80, "y": 25}, {"x": 150, "y": 25}];
+contenedor = d3.select("#contenedor");
+svg = contenedor.append("svg")
+      .attr("width", 500)
+      .attr("height", 500);
+circulos = svg.selectAll("circle")
+     .data(datos);
+circulos.enter().append("circle")
+  .attr("r", 15)
+  .attr("cx", function(d) { return d.x; })
+  .attr("cy", function(d) { return d.y; });
+```
+
+Ahora, suopngamos que _nos llega_ una actualización de los datos y, en consecuencia, necesitamos actualizar el dibujo:
+
+
+```javascript
+datos2 = [{"x": 25, "y": 50}, {"x": 80, "y": 50}, {"x": 150, "y": 50}, {"x": 250, "y": 25}];
+circulos = svg.selectAll("circle")
+     .data(datos2)
+     .attr("fill","red")
+     .attr("cy", function(d) { return d.y; });
+
+circulos.enter().append("circle")
+    .attr("r", 15)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .attr("fill","steelblue")
+  .merge(circulos)
+    .attr("stroke", "black")
+    .attr("stroke-width", "10")
+```
+En este caso, la selección `enter` (los elementos nuevos) está coloreada de azul, mientras que la selección  `update` (los elementos que ya existían), está coloreada de rojo. Fíjense como, al final, usamos la selección `merge` para modificar el estilo de la unión de las selecciónes `enter` y `update`.
+
+Resumiendo, cuando actualizamos los datos `circulos.data(datos2)` nos regresa la selección `update` para que operemos sobre ella. Después podemos trabajar sobre `enter` y, al final, si queremos hacer algo sobre _todos_ los elementos que quedaron en el DOM, podemos usar la selección `merge`.
+
+Pero ¿qué pasa si los nuevos datos tienen menos elementos que los que ya tengo en el DOM?
+
+```javascript
+datos3 = [{"x": 25, "y": 100}];
+circulos = svg.selectAll("circle")
+     .data(datos3)
+     .attr("cy", function(d) { return d.y; })
+     .attr("fill", "green");
+
+circulos.enter().append("circle")
+    .attr("r", 15)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .attr("fill","steelblue")
+  .merge(circulos)
+    .attr("cy", function(d) { return d.y; })
+    .attr("stroke", "chocolate")
+
+circulos.exit().remove()
+```
+
+Nuestros nuevos datos tienen sólo una entrada, mientras que tenemos cuatro elementos en el DOM. Cuando ligamos nuestros nuevos datos, la selección `update` contiene un único elemento: el primero, en el DOM y en el _array_; la selección `enter` está vacía, no hay que crear nuevos elementos del DOM; y aparece una nueva selección: `exit` con los elementos que ya no quedaron ligados a ningun dato y que, por lo tanto, hay que quitar.
+
+
