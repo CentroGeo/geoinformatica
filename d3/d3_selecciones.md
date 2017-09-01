@@ -258,4 +258,38 @@ circulos.exit().remove()
 
 Nuestros nuevos datos tienen sólo una entrada, mientras que tenemos cuatro elementos en el DOM. Cuando ligamos nuestros nuevos datos, la selección `update` contiene un único elemento: el primero, en el DOM y en el _array_; la selección `enter` está vacía, no hay que crear nuevos elementos del DOM; y aparece una nueva selección: `exit` con los elementos que ya no quedaron ligados a ningun dato y que, por lo tanto, hay que quitar.
 
+Con estos ejemplos ya vimos como funcionan las tres selecciones que forman el GUP: unimos datos a una selección, actualizamos los elementos de la parte interior de la unión, creamos los elementos de la parte izquierda y eliminamos los elementos de la parte derecha. Ahora vamos a extendernos un poco sobre cómo funciona la unión para poder hacer un ejemplo que use las tres selecciones al mismo tiempo.
 
+Todas las uniones que hemos usado hasta aquí están basadas en los índices de los arreglos, es decir, la _llave_ que nos permite unir los datos a los elementos del DOM es la posición en cada uno de los _arrays_: el primer elemento del arreglo de datos se une con el primer elemento de nuestra selección y así sucesivamente. Para tener más control sobre la forma en la que se hace esta unión D#,js soporta la unión a través de llaves, es decir, a partir de identificadores en los elementos del DOM. Consideremos el siguiente HTML:
+
+
+<!DOCTYPE html>
+<body>
+  <svg width="500" height="500">
+    <circle id="A" cx="40" cy="60" r="10"></circle>
+    <circle id="B" cx="100" cy="60" r="10"></circle>
+    <circle id="C" cx="200" cy="60" r="10"></circle>
+  </svg>
+</body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+</html>
+
+Vamos a unirlo con un Array de _objetos_:
+
+```javascript
+ datos = [{nombre: "A", valor: 25}, {nombre: "B", valor: 15}, {nombre: "C", valor: 40}]
+ circulos = d3.selectAll("circle")
+ circulos.data(datos, function(d) { return d.nombre; })
+         .attr("r", function(d) { return d.valor; }) 
+```
+Hasta aquí la única diferencia es que, al unir los datos, pasamos un segundo argumento: `data(datos, function(d) { return d.nombre; })`, esta es una función que regresa la llave que nos permite unir los datos a los elementos del DOM. A partir de ahí, la selección `update` funciona como siempre. Esta forma de unir por llaves nos da mucho más control sobre la actualización de los datos:
+
+```javascript
+ datos2 = [{nombre: "A", valor: 25}, {nombre: "B", valor: 15}, {nombre: "F", valor: 100}];
+ circulos = d3.selectAll("circle");
+ circulos.data(datos2, function(d) { return d.nombre; })
+         .attr("fill", "red");
+ circulos.enter().append("circle")
+         .attr("r", function(d) { return d.valor; })
+         .attr("fill", "green");
+```
