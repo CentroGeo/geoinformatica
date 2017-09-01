@@ -276,8 +276,8 @@ Vamos a unir el `svg` con un Array de _objetos_:
 
 ```javascript
  datos = [{nombre:"A", radio:25, x:40, y:60}, {nombre:"B", radio:25, x:100, y:60}, {nombre:"C", radio:25, x:200, y:60}];
- circulos = d3.select("svg").selectAll("circle");
- circulos.data(datos).enter().append("circle")
+ var circulos = d3.select("svg").selectAll("circle");
+     circulos.data(datos).enter().append("circle")
          .attr("r", function(d) { return d.radio; })
          .attr("cx", function(d) { return d.x; })
          .attr("cy", function(d) { return d.y; });
@@ -286,12 +286,15 @@ Hasta aquí la única diferencia es que, al unir los datos, pasamos un segundo a
 
 ```javascript
  datos2 = [{nombre:"A", radio:25, x:40, y:60}, {nombre:"F", radio:25, x:100, y:120}, {nombre:"C", radio:25, x:200, y:60}];
- circulos = d3.selectAll("circle");
- circulos.data(datos2, function(d) { return d.nombre; })
-         .attr("fill", "red");
- circulos.enter().append("circle")
+ var cUpdate = d3.select("svg").selectAll("circle").data(datos2, function(d) { return d.nombre; });
+     cUpdate.attr("fill", "red");
+
+ var cEnter = cUpdate.enter();
+     cEnter.append("circle")
          .attr("r", function(d) { return d.radio; })
          .attr("cx", function(d) { return d.x; })
          .attr("cy", function(d) { return d.y; })
          .attr("fill", "green");
+
+     cUpdate.exit().remove();         
 ```
