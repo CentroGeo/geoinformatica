@@ -266,30 +266,31 @@ Todas las uniones que hemos usado hasta aquí están basadas en los índices de 
 <!DOCTYPE html>
 <body>
   <svg width="500" height="500">
-    <circle id="A" cx="40" cy="60" r="10"></circle>
-    <circle id="B" cx="100" cy="60" r="10"></circle>
-    <circle id="C" cx="200" cy="60" r="10"></circle>
   </svg>
 </body>
   <script src="https://d3js.org/d3.v4.min.js"></script>
 </html>
 
-Vamos a unirlo con un Array de _objetos_:
+Vamos a unir el `svg` con un Array de _objetos_:
 
 ```javascript
- datos = [{nombre: "A", valor: 25}, {nombre: "B", valor: 15}, {nombre: "C", valor: 40}]
- circulos = d3.selectAll("circle")
- circulos.data(datos, function(d) { return d.nombre; })
-         .attr("r", function(d) { return d.valor; }) 
+ datos = [{nombre:"A", radio:25, x:40, y:60}, {nombre:"B", radio:25, x:100, y:60}, {nombre:"C", radio:25, x:200, y:60}];
+ circulos = d3.select("svg").selectAll("circle");
+ circulos.data(datos).enter().append("circle")
+         .attr("r", function(d) { return d.radio; })
+         .attr("cx", function(d) { return d.x; })
+         .attr("cy", function(d) { return d.y; });
 ```
 Hasta aquí la única diferencia es que, al unir los datos, pasamos un segundo argumento: `data(datos, function(d) { return d.nombre; })`, esta es una función que regresa la llave que nos permite unir los datos a los elementos del DOM. A partir de ahí, la selección `update` funciona como siempre. Esta forma de unir por llaves nos da mucho más control sobre la actualización de los datos:
 
 ```javascript
- datos2 = [{nombre: "A", valor: 25}, {nombre: "B", valor: 15}, {nombre: "F", valor: 100}];
+ datos2 = [{nombre:"A", radio:25, x:40, y:60}, {nombre:"F", radio:25, x:100, y:120}, {nombre:"C", radio:25, x:200, y:60}];
  circulos = d3.selectAll("circle");
  circulos.data(datos2, function(d) { return d.nombre; })
          .attr("fill", "red");
  circulos.enter().append("circle")
-         .attr("r", function(d) { return d.valor; })
+         .attr("r", function(d) { return d.radio; })
+         .attr("cx", function(d) { return d.x; })
+         .attr("cy", function(d) { return d.y; })
          .attr("fill", "green");
 ```
