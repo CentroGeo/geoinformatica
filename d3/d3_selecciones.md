@@ -154,7 +154,7 @@ circle.attr("r", function(d) { return Math.sqrt(d); });
 
 Aquí es donde la _magia_ de D3 se empieza a notar: cuando hacemos `circle.data(datos)`, estamos ligando cada uno de los circulos con un valor del arreglo de datos (el `datum` de cada círculo), entonces, cuando le damos valor al atributo "r" la función se ejecuta una vez por cada elemento que tenga un dato ligado: es un `for` implícito.
 
-En este ejemplo tenemos el mismo número de círcilos que elementos en el arreglo de datos, pero ¿qué pasaría si tenemos más datos que círculos? Aquí es donde entra la selección `enter`. Antes de continuar, recarga la página de forma que tengas los tres círculos negros con los que empezamos.
+En este ejemplo tenemos el mismo número de círculos que elementos en el arreglo de datos, pero ¿qué pasaría si tuviéramos más datos que círculos? Aquí es donde entra la selección `enter`. Antes de continuar, recarga la página de forma que tengas los tres círculos negros con los que empezamos.
 
 ```javascript
 datos = [32, 57, 112, 33];
@@ -183,7 +183,7 @@ En el centro del diagrama tenemos la selección `update`: los datos que ya está
 
 El Patrón General de Actualización (GUP) es, junto con la unión de datos, la base de D3.js. Es a través del GUP como se implementa la dinámica de las visualizaciones: reaccionar a nuevos datos, input del usuario, etcétera.
 
-En la sección anterior vimos cómo se puede ligar un conjunto de datos a una selección y cómo, cuando no tenemos datos previos, nuestros datos quedan ligados en una selección especial llamada `enter`. También comenzamos a ver lo que sucede cuando _actualizamos_ los datos de una selección y describimos los tres casos posibles: `enter`, `update` y `exit`. Ahora, vamos a trabajar con un caso sencillo pero que explícitamente maneja las tres selecciones.
+En la sección anterior vimos cómo se puede ligar un conjunto de datos a una selección y cómo, cuando no tenemos elementos para acomodarlos, nuestros datos quedan ligados en una selección especial llamada `enter`. También comenzamos a ver lo que sucede cuando _actualizamos_ los datos de una selección y describimos los tres casos posibles: `enter`, `update` y `exit`. Ahora, vamos a trabajar con un caso sencillo pero que explícitamente maneja las tres selecciones.
 
 Vamos a comenzar con un HTML que contiene únicamente un `div` donde vamos a albergar nustra _gráfica_:
 
@@ -260,9 +260,9 @@ Nuestros nuevos datos tienen sólo una entrada, mientras que tenemos cuatro elem
 
 Con estos ejemplos ya vimos como funcionan las tres selecciones que forman el GUP: unimos datos a una selección, actualizamos los elementos de la parte interior de la unión, creamos los elementos de la parte izquierda y eliminamos los elementos de la parte derecha. Ahora vamos a extendernos un poco sobre cómo funciona la unión para poder hacer un ejemplo que use las tres selecciones al mismo tiempo.
 
-Todas las uniones que hemos usado hasta aquí están basadas en los índices de los arreglos, es decir, la _llave_ que nos permite unir los datos a los elementos del DOM es la posición en cada uno de los _arrays_: el primer elemento del arreglo de datos se une con el primer elemento de nuestra selección y así sucesivamente. Para tener más control sobre la forma en la que se hace esta unión D#,js soporta la unión a través de llaves, es decir, a partir de identificadores en los elementos del DOM. Consideremos el siguiente HTML:
+Todas las uniones que hemos usado hasta aquí están basadas en los índices de los arreglos, es decir, la _llave_ que nos permite unir los datos a los elementos del DOM es la posición en cada uno de los _arrays_: el primer elemento del arreglo de datos se une con el primer elemento de nuestra selección y así sucesivamente. Para tener más control sobre la forma en la que se hace esta unión D3.js soporta la unión a través de llaves, es decir, a partir de identificadores en los elementos del DOM. Consideremos el siguiente HTML:
 
-
+```html
 <!DOCTYPE html>
 <body>
   <svg width="500" height="500">
@@ -270,6 +270,7 @@ Todas las uniones que hemos usado hasta aquí están basadas en los índices de 
 </body>
   <script src="https://d3js.org/d3.v4.min.js"></script>
 </html>
+```
 
 Vamos a unir el `svg` con un Array de _objetos_:
 
