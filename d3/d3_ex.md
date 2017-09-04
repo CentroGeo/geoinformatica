@@ -109,7 +109,7 @@ de los datos dentro del callback.
 <!DOCTYPE html>
 <head>
 <style>
-/*Los colores para las clases de poblaciÃ³n*/
+/* Los colores para las clases */
   .q0 { fill:#fcc383; }
   .q1 { fill:#fc9f67; }
   .q2 { fill:#f4794e; }
@@ -221,9 +221,93 @@ hazMapa(interes);
 después de haber creado las entradas del elemento `<select>`. Aquí vemos qué variable está seleccionada (`PRD94`)
 y hacemos el mapa con esta variable.
 
+El código completo queda así:
+```html
+<!DOCTYPE html>
+<head>
+<style>
+/* Los colores para las clases */
+  .q0 { fill:#fcc383; }
+  .q1 { fill:#fc9f67; }
+  .q2 { fill:#f4794e; }
+  .q3 { fill:#e65338; }
+  .q4 { fill:#ce2a1d; }
+  .q5 { fill:#b30000; }
+  
+  .variable {
+    position: absolute;
+    top: 100px;
+    left: 650px;
+  }
+</style>
+</head>
+<body>
+</body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+  <script>
+    var features;
+    
+    var width = 800,
+        height = 600;
+  
+    var projection = d3.geoMercator()
+                       .scale(1450)
+                       .center([-97.16, 21.411])
+                       .translate([width/1.5, height/1.75]);
+
+    var select = d3.select("body")
+                   .append("select")
+                   .attr("class", "variable");
+                   
+    var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+        
+    d3.json('elecciones.json', function(error, datos) {
+    
+        features = topojson.feature(datos, datos.objects.elecciones);
+        
+        var opciones = d3.keys(features.features[0].properties);
+        select.selectAll("option")
+              .data(opciones)
+              .enter()
+              .append("option")
+              .attr("value", function (d) { return d; })
+              .property("selected", function(d){ return d === 'PRD94'; })
+              .text(function (d) { return d; });
+        
+        select.on("change", function(d) {
+           interes = d3.select(this).property("value");
+           d3.select("svg").selectAll("path").remove();
+           hazMapa(interes);
+        });
+        var interes = d3.select('select').property("value");
+        hazMapa(interes);
+    });
+    
+    function hazMapa(interes){
+        
+        var max = d3.max(features.features, function(d) { return d.properties[interes]; })
+        
+        var quantize = d3.scaleQuantize()
+                         .domain([0, max])
+                         .range(d3.range(6).map(function(i) { return "q" + i; }));
+                     
+         svg.selectAll("path")
+            .data(features.features)
+            .enter().append("path")
+            .attr("d", d3.geoPath().projection(projection))
+            .attr("class", function(d){ return quantize(d.properties[interes]) } );
+    }
+  </script>
+</html>
+```
 
 Grafica con esas variables que cambie con la interactividad
+
 Grafica que muestre promedio
+
 Al hacer clic en estado que se actualiced la grafica con los datos de es estado
 
 Regresar a [Selecciones, Joins y General Update Pattern](d3_selecciones.md)
