@@ -334,3 +334,4 @@ Las [transiciones](https://bost.ocks.org/mike/transition/) son una _interfase_ d
 
 Ya para terminar, aquí está el código completo con una implementación del último ejemplo. Las acciones están ligadas a botones que nos dan una forma de activar y reiniciar la visualización. Fíjense como se liga la acción de los botones a los eventos de D3.
 
+Regresar a [Parte 2: con SVG](d3_2.md) | Continuar a [Ejercicio práctico con D3](d3_ex.md)
