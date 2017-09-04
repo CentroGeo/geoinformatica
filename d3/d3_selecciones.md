@@ -334,4 +334,64 @@ Las [transiciones](https://bost.ocks.org/mike/transition/) son una _interfase_ d
 
 Ya para terminar, aquí está el código completo con una implementación del último ejemplo. Las acciones están ligadas a botones que nos dan una forma de activar y reiniciar la visualización. Fíjense como se liga la acción de los botones a los eventos de D3.
 
+```html
+<!DOCTYPE html>
+<head>
+
+</head>
+
+<body>
+  <div id="buttons">
+      <button id="reiniciar">Reiniciar</button>
+      <button id="mover">Mover</button>
+  </div>
+  <svg width="500" height="500">
+  </svg>
+</body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script>
+
+    //Dibuja los los datos que le pasen
+    function actualiza(data){
+
+      var cUpdate = d3.select("svg").selectAll("circle")
+                      .data(data, function(d) { return d.nombre; });
+     
+      cUpdate.transition()
+             .duration(500)
+             .attr("cy", function(d) { return d.y; })
+             .attr("fill", "red");
+
+      var cEnter = cUpdate.enter();
+      cEnter.append("circle")
+            .transition()
+            .duration(500)
+            .attr("r", function(d) { return d.radio; })
+            .attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; })
+            .attr("fill", "green");
+
+      cUpdate.exit().transition().duration(500).remove();   
+    };
+     // definimos los conjuntos de datos
+    datos = [{nombre:"A", radio:25, x:40, y:60}, {nombre:"B", radio:25, x:100, y:60}, {nombre:"C", radio:25, x:200, y:60}];
+    datos2 = [{nombre:"A", radio:25, x:40, y:160}, {nombre:"F", radio:25, x:100, y:120}, {nombre:"C", radio:25, x:200, y:260}];
+   
+    // Asignamos acciones a los botones
+    d3.select("#reiniciar")
+        .on("click", function(d,i) {
+            actualiza(datos)
+        })   
+    d3.select("#mover")
+        .on("click", function(d,i) {
+            actualiza(datos2)
+        })
+  
+    // Pinta los datos al cargar la pá
+  gina  actualiza(datos)
+  </script>
+</html>
+```
+
+
 Regresar a [Parte 2: con SVG](d3_2.md) | Continuar a [Ejercicio práctico con D3](d3_ex.md)
