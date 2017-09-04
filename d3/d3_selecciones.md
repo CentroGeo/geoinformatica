@@ -387,8 +387,8 @@ Ya para terminar, aquí está el código completo con una implementación del ú
             actualiza(datos2)
         })
   
-    // Pinta los datos al cargar la pá
-  gina  actualiza(datos)
+    // Pinta los datos al cargar la página
+    actualiza(datos)
   </script>
 </html>
 ```
