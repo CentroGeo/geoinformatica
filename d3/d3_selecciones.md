@@ -272,7 +272,7 @@ Todas las uniones que hemos usado hasta aquí están basadas en los índices de 
 </html>
 ```
 
-Vamos a unir el `svg` con un Array de _objetos_:
+Vamos a crear unos círculos y unirlos a un Array de _objetos_:
 
 ```javascript
  datos = [{nombre:"A", radio:25, x:40, y:60}, {nombre:"B", radio:25, x:100, y:60}, {nombre:"C", radio:25, x:200, y:60}];
@@ -282,7 +282,7 @@ Vamos a unir el `svg` con un Array de _objetos_:
          .attr("cx", function(d) { return d.x; })
          .attr("cy", function(d) { return d.y; });
 ```
-Hasta aquí la única diferencia es que, al unir los datos, pasamos un segundo argumento: `data(datos, function(d) { return d.nombre; })`, esta es una función que regresa la llave que nos permite unir los datos a los elementos del DOM. A partir de ahí, la selección `update` funciona como siempre. Esta forma de unir por llaves nos da mucho más control sobre la actualización de los datos:
+Hasta aquí todo es igual que antes, ahora vamos a unir un nuevo conjunto de datos, usando la propiedad `nombre` de cada objeto como _llave_ para la unión:
 
 ```javascript
  datos2 = [{nombre:"A", radio:25, x:40, y:60}, {nombre:"F", radio:25, x:100, y:120}, {nombre:"C", radio:25, x:200, y:60}];
@@ -296,5 +296,9 @@ Hasta aquí la única diferencia es que, al unir los datos, pasamos un segundo a
          .attr("cy", function(d) { return d.y; })
          .attr("fill", "green");
 
-     cUpdate.exit().remove();         
+ cUpdate.exit().remove();         
 ```
+
+Al hacer la unión, pasamos un segundo argumrnto a la función `data()`: `function(d) { return d.nombre; }`. Esta función regresa, para cada dato, el identificador que vamos a usar como _llave_. De esta forma tenemos un control mucho más fino sobre la forma en la que los nuevos datos actualizan a los datos anteriores. En el ejemplo, el identificador "F" no aparece en los datos originales y por lo tanto forma parte de la selección de `enter` en la actualización (piensen cómo harían esto si hacen esa unión por índice, como en los ejemplos anteriores).
+
+Otra cosa interesante del último ejemplo es que hace uso de las tres selecciones especiales: `enter`, `update` y `exit`. Fíjense como, para poder utlizar las tres, tenemos que manejar cada una por separado: la unión con los datos _siempre_ regresa la selección update; mientras que `update.enter()` y `update.exit()` regresan las selecciones de enter y exit respectivamente.
