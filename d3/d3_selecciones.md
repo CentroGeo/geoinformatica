@@ -286,8 +286,9 @@ Hasta aquí todo es igual que antes, ahora vamos a unir un nuevo conjunto de dat
 
 ```javascript
  datos2 = [{nombre:"A", radio:25, x:40, y:60}, {nombre:"F", radio:25, x:100, y:120}, {nombre:"C", radio:25, x:200, y:60}];
- var cUpdate = d3.select("svg").selectAll("circle").data(datos2, function(d) { return d.nombre; });
-     cUpdate.attr("fill", "red");
+ var cUpdate = d3.select("svg").selectAll("circle")
+                .data(datos2, function(d) { return d.nombre; });
+ cUpdate.attr("fill", "red");
 
  var cEnter = cUpdate.enter();
      cEnter.append("circle")
@@ -302,3 +303,34 @@ Hasta aquí todo es igual que antes, ahora vamos a unir un nuevo conjunto de dat
 Al hacer la unión, pasamos un segundo argumrnto a la función `data()`: `function(d) { return d.nombre; }`. Esta función regresa, para cada dato, el identificador que vamos a usar como _llave_. De esta forma tenemos un control mucho más fino sobre la forma en la que los nuevos datos actualizan a los datos anteriores. En el ejemplo, el identificador "F" no aparece en los datos originales y por lo tanto forma parte de la selección de `enter` en la actualización (piensen cómo harían esto si hacen esa unión por índice, como en los ejemplos anteriores).
 
 Otra cosa interesante del último ejemplo es que hace uso de las tres selecciones especiales: `enter`, `update` y `exit`. Fíjense como, para poder utlizar las tres, tenemos que manejar cada una por separado: la unión con los datos _siempre_ regresa la selección update; mientras que `update.enter()` y `update.exit()` regresan las selecciones de enter y exit respectivamente.
+
+## Bonus: transiciones
+
+Ya para acabar, vamos a ver cómo producir transiciones _suaves_ al actualizar los datos. En lugar de que los elementos aparezcan o desaparezcan, vamos a hacer animaciones. consideremos el ejemplo anterior en el momento en el que tenemos los circulos originales, vamos a actualizar los datos y producir una transición entre los dos estados:
+
+```javascript
+ datos2 = [{nombre:"A", radio:25, x:40, y:160}, {nombre:"F", radio:25, x:100, y:120}, {nombre:"C", radio:25, x:200, y:260}];
+ var cUpdate = d3.select("svg").selectAll("circle")
+          .data(datos2, function(d) { return d.nombre; });
+     
+ cUpdate.transition()
+          .duration(500)
+          .attr("cy", function(d) { return d.y; })
+          .attr("fill", "red");
+
+ var cEnter = cUpdate.enter();
+     cEnter.append("circle")
+         .transition()
+         .duration(500)
+         .attr("r", function(d) { return d.radio; })
+         .attr("cx", function(d) { return d.x; })
+         .attr("cy", function(d) { return d.y; })
+         .attr("fill", "green");
+
+ cUpdate.exit().transition().duration(500).remove();         
+```
+
+Las [transiciones](https://bost.ocks.org/mike/transition/) son una _interfase_ de las selecciones: contienen una referencia a los elementos seleccionados, implementan _casi_ todos los métodos de las selecciones y añaden nuevas funcionalidades. Como pueden ver, cuando llamamos a `transition` desde una selección, lo que sucede es que D3 interpola entre los valores iniciales y finales de las propiedades que estamos modificando y produce una animación a partir de los valores interpolados. Aquí solo usamos la forma más simple, sin embargo D3.js nos da mucho control sobre la forma en a que sucede la transición.
+
+Ya para terminar, aquí está el código completo con una implementación del último ejemplo. Las acciones están ligadas a botones que nos dan una forma de activar y reiniciar la visualización. Fíjense como se liga la acción de los botones a los eventos de D3.
+
