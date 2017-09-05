@@ -1,6 +1,6 @@
 # Ejercicio práctico con D3
 
-En este último apartdo queremos usar lo aprendido de D3 para hacer un mapa.
+En este último apartdo vamos a usar lo que hemos aprendido de D3 (y en el camino aprender otras cosas) para hacer un mapa.
 
 Vamos a retomar los datos históricos de los distritos electorales de 1994 a 2012.
 Los puedes descargar de [aquí](https://github.com/CentroGeo/geoinformatica/tree/master/d3/shp).
@@ -10,11 +10,13 @@ en la geometría de los distritos electorales. Ve a [mapshaper](http://mapshaper
 archivos del _shape_. Luego haz clic en _Simplify_, escoge cualquier método de simplificación y luego escoge
 un porcentaje (por ejemplo, 75%). Luego haz clic en _Export_ y salva el resultado como **TopoJSON**.
 
-Inmediatamente puedes ver que el TopoJSON es de alrededor de 1.5 MB. Un ahorro de ~3 veces el tamaño original.
+Puedes ver que el TopoJSON es de alrededor de 1.5 MB. Un ahorro de ~3 veces el tamaño original.
 
 **TAREA:** leer qué es un TopoJSON (que resulta ser que lo desarrolló el mismo Mike Bostock).
 
-Ahora vamos a usar este nuevo archivo para hacer un primer mapa usando D3. Hay que incluir dos librerías de JS: `D3` y `topojson`.
+Para hacer un mapa en D3, necesitamos  incluir dos librerías de JS: `D3` y `topojson`. La primera es la base de D3, que es lo que hemos usado siempre hasta ahora, la segunda es una extensión para manejar datos de tipo `topoJSON`
+
+Lo primero que vamos a hacer es leer los datos y dibujar un mapa pintando todos los polígonos de un mismo color:
 
 ```html
 <!DOCTYPE html>
@@ -49,9 +51,23 @@ Ahora vamos a usar este nuevo archivo para hacer un primer mapa usando D3. Hay q
   </script>
 </html>
 ```
-Este primer mapa colorea todos los polígonos con un mismo color predeterminado. Para colorear este mapa
-de acuerdo a una de las variables, por ejemplo, el porcentaje de votos del PRD en 1994, hay que modificar 
-el código para leer ese dato en particular y definir estilos para nuestra clasificación de colores. 
+Aqui tenemos ya todos los pasos básicos para dibujar un mapa con d3:
+
+- Definir una proyección, las coordenadas del centro del mapa y el nivel de zoom:
+
+```javascript
+var projection = d3.geoMercator()
+	           .scale(1450)
+	           .center([-97.16, 21.411])
+	           .translate([width/1.5, height/1.75]);
+```
+- Leer los datos: `d3.json` funciona igual que `d3.csv` como un _wrapper_ para una llamada AJAX. Entonces toda la acción va a suceder en el _callback_ de esa función.
+
+- Desempacar los _features_: `features = topojson.feature(datos, datos.objects.elecciones);`
+
+- Agregar un _path_ para cada uno de los features.
+
+Para colorear este mapa de acuerdo a una de las variables, por ejemplo, el porcentaje de votos del PRD en 1994, hay que modificar el código para leer ese dato en particular y definir estilos para nuestra clasificación de colores. 
 Esto lo hacemos con la función `d3.scaleQuantize()`. 
 
 ```html
@@ -101,10 +117,11 @@ Esto lo hacemos con la función `d3.scaleQuantize()`.
     });
   </script>
 ```
+Fíjense que definimos un conjunto de estilos para cada clase y luego, en la función `quantize` regresamos un _string_ con el nombre de la clase que le corresponde a cada dato.
 
-Pero qué pasa si queremos escoger pintar el mapa con otra variable? Es claro que ese valor de `max` que usamos
-va a cambiar dependiendo de la variabele que se use... Vamos a escoger una variable y leer su máximo directamente 
-de los datos dentro del callback.
+Pero ¿qué pasa si queremos pintar el mapa con otra variable? Es claro que ese valor de `max` que usamos
+va a cambiar dependiendo de la variable que se use, entonces necesitamos leer el máximo directamente 
+de los datos, dentro del callback.
 ```html
 <!DOCTYPE html>
 <head>
