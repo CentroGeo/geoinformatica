@@ -33,20 +33,23 @@ Lo primero que vamos a hacer es leer los datos y dibujar un mapa pintando todos 
         height = 600;
   
     var projection = d3.geoMercator()
-                       .scale(1450)
-                       .center([-97.16, 21.411])
-                       .translate([width/1.5, height/1.75]);
+                       .scale(1400)
+                       .center([-102.584065, 23.62755])
+                       .translate([width/2, height/2]);
 
     var svg = d3.select("body").append("svg")
                 .attr("width", width)
                 .attr("height", height);
 		
+    var g = svg.append("g")
+               .attr("id", "estados");
+		
     d3.json('elecciones.json', function(error, datos) {
         features = topojson.feature(datos, datos.objects.elecciones);
-        svg.selectAll("path")
-            .data(features.features)
-            .enter().append("path")
-            .attr("d", d3.geoPath().projection(projection));
+        g.selectAll("path")
+           .data(features.features)
+           .enter().append("path")
+           .attr("d", d3.geoPath().projection(projection));
     });
   </script>
 </html>
@@ -57,9 +60,9 @@ Aqui tenemos ya todos los pasos básicos para dibujar un mapa con d3:
 
 ```javascript
 var projection = d3.geoMercator()
-	           .scale(1450)
-	           .center([-97.16, 21.411])
-	           .translate([width/1.5, height/1.75]);
+                   .scale(1400)
+                   .center([-102.584065, 23.62755])
+                   .translate([width/2, height/2]);
 ```
 - Leer los datos: `d3.json` funciona igual que `d3.csv` como un _wrapper_ para una llamada AJAX. Entonces toda la acción va a suceder en el _callback_ de esa función.
 
@@ -94,14 +97,17 @@ Esto lo hacemos con la función `d3.scaleQuantize()`.
         height = 600;
   
     var projection = d3.geoMercator()
-                       .scale(1450)
-                       .center([-97.16, 21.411])
-                       .translate([width/1.5, height/1.75]);
+                       .scale(1400)
+                       .center([-102.584065, 23.62755])
+                       .translate([width/2, height/2]);
 
     var svg = d3.select("body").append("svg")
                 .attr("width", width)
                 .attr("height", height);
-        
+
+    var g = svg.append("g")
+               .attr("id", "estados");
+	       
     d3.json('elecciones.json', function(error, datos) {
         features = topojson.feature(datos, datos.objects.elecciones);
         
@@ -109,7 +115,7 @@ Esto lo hacemos con la función `d3.scaleQuantize()`.
                          .domain([0, 52])
                          .range(d3.range(6).map(function(i) { return "q" + i; }));
                      
-         svg.selectAll("path")
+         g.selectAll("path")
             .data(features.features)
             .enter().append("path")
             .attr("d", d3.geoPath().projection(projection))
@@ -146,13 +152,16 @@ de los datos, dentro del callback.
         height = 600;
   
     var projection = d3.geoMercator()
-                       .scale(1450)
-                       .center([-97.16, 21.411])
-                       .translate([width/1.5, height/1.75]);
+                       .scale(1400)
+                       .center([-102.584065, 23.62755])
+                       .translate([width/2, height/2]);
 
     var svg = d3.select("body").append("svg")
                 .attr("width", width)
                 .attr("height", height);
+
+    var g = svg.append("g")
+               .attr("id", "estados");
         
     d3.json('elecciones.json', function(error, datos) {
         features = topojson.feature(datos, datos.objects.elecciones);
@@ -163,11 +172,11 @@ de los datos, dentro del callback.
                          .domain([0, max])
                          .range(d3.range(6).map(function(i) { return "q" + i; }));
                      
-         svg.selectAll("path")
-            .data(features.features)
-            .enter().append("path")
-            .attr("d", d3.geoPath().projection(projection))
-            .attr("class", function(d){ return quantize(d.properties[interes]) } );
+        g.selectAll("path")
+           .data(features.features)
+           .enter().append("path")
+           .attr("d", d3.geoPath().projection(projection))
+           .attr("class", function(d){ return quantize(d.properties[interes]) } );
     });
   </script>
 </html>
@@ -269,9 +278,9 @@ El código completo queda así:
         height = 600;
   
     var projection = d3.geoMercator()
-                       .scale(1450)
-                       .center([-97.16, 21.411])
-                       .translate([width/1.5, height/1.75]);
+                       .scale(1400)
+                       .center([-102.584065, 23.62755])
+                       .translate([width/2, height/2]);
 
     var select = d3.select("body")
                    .append("select")
@@ -280,6 +289,9 @@ El código completo queda así:
     var svg = d3.select("body").append("svg")
                 .attr("width", width)
                 .attr("height", height);
+
+    var g = svg.append("g")
+               .attr("id", "estados");
         
     d3.json('elecciones.json', function(error, datos) {
     
@@ -311,15 +323,17 @@ El código completo queda así:
                          .domain([0, max])
                          .range(d3.range(6).map(function(i) { return "q" + i; }));
                      
-         svg.selectAll("path")
-            .data(features.features)
-            .enter().append("path")
-            .attr("d", d3.geoPath().projection(projection))
-            .attr("class", function(d){ return quantize(d.properties[interes]) } );
+         g.selectAll("path")
+           .data(features.features)
+           .enter().append("path")
+           .attr("d", d3.geoPath().projection(projection))
+           .attr("class", function(d){ return quantize(d.properties[interes]) } );
     }
   </script>
 </html>
 ```
+
+## Agregar una gráfica que esté ligada a los datos (y al mapa)
 
 Grafica con esas variables que cambie con la interactividad
 
