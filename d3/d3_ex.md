@@ -335,10 +335,276 @@ El código completo queda así:
 
 ## Agregar una gráfica que esté ligada a los datos (y al mapa)
 
-Grafica con esas variables que cambie con la interactividad
+```html
+<!DOCTYPE html>
+<head>
+<style>
+/*Los colores para las clases de poblaciÃ³n*/
+  .q0 { fill:#fcc383; }
+  .q1 { fill:#fc9f67; }
+  .q2 { fill:#f4794e; }
+  .q3 { fill:#e65338; }
+  .q4 { fill:#ce2a1d; }
+  .q5 { fill:#b30000; }
+  
+  #partido{
+    position: absolute;
+    top: 100px;
+    left: 650px;
+  }
+  
+  #anho{
+    position: absolute;
+    top: 100px;
+    left: 705px;
+  }
+  
+  .variable{
+    position: absolute;
+    top: 130px;
+    left: 665px;
+  }
+  
+  .background {
+    fill: none;
+    pointer-events: all;
+  }
 
-Grafica que muestre promedio
+  #estados .active {
+    stroke: black;
+  }
+  
+  #bars {
+    position: absolute;
+    margin-top: 100px;
+    margin-left: 50px;
+  }
 
-Al hacer clic en estado que se actualiced la grafica con los datos de es estado
+  .bar text {
+    fill: black;
+    font: 10px sans-serif;
+    text-anchor: right;
+  }
+  
+  #titulo {
+    position: absolute;
+    top: 50px;
+    left: 900px;
+    font: 20px sans-serif;
+  }
+  
+</style>
+</head>
+<body>
+  <select id="partido" class="select">
+    <option value="PRI" selected=true>PRI</option>
+    <option value="PAN">PAN</option>
+    <option value="PRD">PRD</option>
+  </select>
+  <select id="anho", class="select">
+    <option value="94">1994</option>
+    <option value="00">2000</option>
+    <option value="06">2006</option>
+    <option value="12">2012</option>
+  </select>
+  <div id="titulo"></div>
+</body>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+  <script>
+    var features, nest, bar;
+    
+    var width = 800,
+        height = 600,
+        active = d3.select(null);
+  
+    var projection = d3.geoMercator()
+                       .scale(1400)
+                       .center([-102.584065, 23.62755])
+                       .translate([width/2, height/2]);
+
+    var select = d3.selectAll(".select");
+                   
+    var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+                
+    svg.append("rect")
+       .attr("class", "background")
+       .attr("width", width)
+       .attr("height", height)
+       .on("click", reset);
+          
+    var g = svg.append("g")
+               .attr("id", "estados");
+               
+    var barSvg = d3.select("body").append("svg")
+               .attr("id", "bars")
+               .attr("height", 260)
+               .attr("width", 400);
+               
+
+    var path = d3.geoPath().projection(projection);
+        
+    d3.json('elecciones.json', function(error, datos) {
+    
+        features = topojson.feature(datos, datos.objects.elecciones);
+        
+        var propiedades = features.features.map(function(distrito) {return distrito.properties;});
+        nest = d3.nest()
+          .key(function(d) { return d.CLAVEGEO; })
+          .rollup(function(values) {
+            return {
+              PRI94: +d3.values(values)[0]['PRI94'],
+              PRI00: +d3.values(values)[0]['PRI00'],
+              PRI06: +d3.values(values)[0]['PRI06'],
+              PRI12: +d3.values(values)[0]['PRI12'],
+              PAN94: +d3.values(values)[0]['PAN94'],
+              PAN00: +d3.values(values)[0]['PAN00'],
+              PAN06: +d3.values(values)[0]['PAN06'],
+              PAN12: +d3.values(values)[0]['PAN12'],
+              PRD94: +d3.values(values)[0]['PRD94'],
+              PRD00: +d3.values(values)[0]['PRD00'],
+              PRD06: +d3.values(values)[0]['PRD06'],
+              PRD12: +d3.values(values)[0]['PRD06']
+            };
+          })
+          .entries(propiedades);
+        
+        
+        select.on("change", function(d) {
+           var interes = "";
+           d3.selectAll(".select").each(function(d,i){ return interes+=this.value;});
+           hazMapa(interes);
+        });
+        var interes = "";
+           d3.selectAll(".select").each(function(d,i){ return interes+=this.value;});
+        hazMapa(interes);
+    });
+    
+    function hazMapa(interes){
+
+        var max = d3.max(features.features, function(d) { return d.properties[interes]; })
+        
+        var quantize = d3.scaleQuantize()
+                         .domain([0, max])
+                         .range(d3.range(6).map(function(i) { return "q" + i; }));
+                     
+         var mapUpdate = g.selectAll("path")
+                          .data(features.features);
+         
+         var mapEnter = mapUpdate.enter();
+         
+         mapEnter.append("path")
+                 .merge(mapUpdate)
+                 .attr("d", path)
+                 .attr("class", function(d){ return quantize(d.properties[interes]) } )
+                 .on("click", clicked);
+    }
+    
+    function hazGrafica(anho, distrito){
+        var partidos = ['PRI', 'PAN', 'PRD'];
+        var colores = {"PRI": "#cc0000", "PAN": "#4da6ff", "PRD": "#ffee17"};
+        var datos = [];
+        
+        for (i = 0; i <= 2 ; i++){
+            c = {};
+            c["nombre"] = partidos[i];
+            c["valor"] = distrito[0].value[partidos[i]+anho];
+            datos.push(c);
+        }
+        
+        var barWidth = 400,
+            barHeight = 86;
+        var x = d3.scaleLinear()
+                  .range([0, barWidth])
+                  .domain([0, 100]);
+        
+        bar = barSvg.selectAll(".bar")
+                    .data(datos, function(d){ return d.nombre;});
+        
+        var barEnter = bar.enter()
+            .append("g")
+            .attr("class", "bar")
+            .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; })
+        
+        d3.select("#titulo").html("Estado:" + distrito[0].key.substr(0,2) + " - Distrito:" + distrito[0].key.substr(3));
+        
+        barEnter.append("rect")
+            .transition()
+            .duration(500)
+            .attr("width", function(d) { return x(d.valor); })
+            .attr("height", barHeight - 1)
+            .attr("fill", function(d) { return colores[d.nombre]; });
+            
+        
+            
+        barEnter.append("text")
+                .transition()
+                .duration(500)
+                .attr("x", function(d) { return x(d.valor) + 10; })
+                .attr("y", barHeight / 2)
+                .attr("dy", ".35em")
+                .text(function(d) { return d.valor });
+                
+        barEnter.append("text")
+                .transition()
+                .duration(500)
+                .attr("x", 10 )
+                .attr("y", barHeight / 2)
+                .attr("dy", ".35em")
+                .text(function(d) { return d.nombre });
+            
+        bar.select("rect")
+           .transition()
+           .duration(500)
+           .attr("width", function(d) { return x(d.valor); });
+
+        bar.select("text")
+           .transition()
+           .duration(500)
+           .attr("x", function(d) { return x(d.valor) + 10; })
+           .text(function(d) { return d.valor; });
+           
+    }
+    
+    function clicked(d) {
+        if (active.node() === this) return reset();
+        active.classed("active", false);
+        active = d3.select(this).classed("active", true);
+
+        var bounds = path.bounds(d),
+        dx = bounds[1][0] - bounds[0][0],
+        dy = bounds[1][1] - bounds[0][1],
+        x = (bounds[0][0] + bounds[1][0]) / 2,
+        y = (bounds[0][1] + bounds[1][1]) / 2,
+        scale = .9 / Math.max(dx / width, dy / height),
+        translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+        g.transition()
+         .duration(750)
+         .style("stroke-width", 1.5 / scale + "px")
+         .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+         
+        var distrito = nest.filter(function(a) {
+              return a.key == d.properties.CLAVEGEO;
+           });
+           
+        var anho = d3.select("#anho").node().value;
+        hazGrafica(anho, distrito);
+   }
+
+   function reset() {
+        active.classed("active", false);
+        active = d3.select(null);
+
+        g.transition()
+         .duration(750)
+         .style("stroke-width", "1.5px")
+         .attr("transform", "");
+    }
+  </script>
+</html>
+```
 
 Regresar a [Selecciones, Joins y General Update Pattern](d3_selecciones.md)
