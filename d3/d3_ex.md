@@ -333,13 +333,145 @@ El código completo queda así:
 </html>
 ```
 
+Esta forma de hacerlo funciona, pero no es la forma _D3_, es decir, no estamos usando los datos para llevar el flujo del documento. Fíjense que en el evento de _clic_ hacemos `d3.select("svg").selectAll("path").remove();`, esto efectivamente elimina todos los _paths_ junto con sus datos, una mejor opción es usar la selección de `update` para actualizar los datos:
+
+```javascript
+    function hazMapa(interes){
+
+        var max = d3.max(features.features, function(d) { return d.properties[interes]; })
+        
+        var quantize = d3.scaleQuantize()
+                         .domain([0, max])
+                         .range(d3.range(6).map(function(i) { return "q" + i; }));
+                     
+         var mapUpdate = g.selectAll("path")
+                          .data(features.features);
+         
+         var mapEnter = mapUpdate.enter();
+         
+         mapEnter.append("path")
+                 .merge(mapUpdate)
+                 .attr("d", path)
+                 .attr("class", function(d){ return quantize(d.properties[interes]) } )
+                 .on("click", clicked);
+    }
+```
+
+Ahora ya estamos utilizando la selección `update` para actualizar los colores del mapa en función de la variable de interés. Realmente no cambia nada, más que la satisfacción de hacer las cosas como se debe.
+
+
 ## Agregar una gráfica que esté ligada a los datos (y al mapa)
+
+Para terminar el ejercicio, vamos a añadir a nuestra visualización una gráfica de barras que mustre los resultados electorales en el distrito en que se haga clic, para el año seleccionado en la variable de interés. De los talleres anteriores ya sabemos cómo hacer gráficas de barras y actualizar sus datos, lo que no sabemos es como ligar las acciones entre los dos elementos. Antes de empezar, hay que hacer algunos arreglos para ayudar a la interacción del usuario con la visualización.
+
+Primero que nada, algunos distritos son muy pequeños, por lo que hacer clic directamente sobre ellos resultaría difícil. Una forma de arreglar este problema es implementar un _zoom_: al hacer clic en un distritu, la visualización debe centrarse en el distrito y acercarse a la extensión del mismo. Para hacer esto vamos a hacer una transición sobre el `translate` del mapa. Lo primero que necesitamos hacer es decirle a cada `path` que _escuche_ los clics:
+
+```javascript
+ mapEnter.append("path")
+	 .merge(mapUpdate)
+	 .attr("d", path)
+	 .attr("class", function(d){ return quantize(d.properties[interes]) } )
+	 .on("click", clicked);
+```
+Aquí ligamos el _clic_ a la función `clicked` que es donde vamos a programar la _magia_ del zoom:
+
+
+```javascript
+    function clicked(d) {
+        if (active.node() === this) return reset();
+        active.classed("active", false);
+        active = d3.select(this).classed("active", true);
+
+        var bounds = path.bounds(d),
+        dx = bounds[1][0] - bounds[0][0],
+        dy = bounds[1][1] - bounds[0][1],
+        x = (bounds[0][0] + bounds[1][0]) / 2,
+        y = (bounds[0][1] + bounds[1][1]) / 2,
+        scale = .9 / Math.max(dx / width, dy / height),
+        translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+        g.transition()
+         .duration(750)
+         .style("stroke-width", 1.5 / scale + "px")
+         .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+   }
+
+   function reset() {
+        active.classed("active", false);
+        active = d3.select(null);
+
+        g.transition()
+         .duration(750)
+         .style("stroke-width", "1.5px")
+         .attr("transform", "");
+    }
+
+```
+
+Lo primero que estamos haciendo es ver si el polígono en el que hicimos clic es el polígono q7ue ya tenemos seleccionado, de esta forma, volver a hacer clic sobre el polígono nos regresa a la extensión original (esa lógica está en la función `reset`). Luego le cambiamos la clase al polígono seleccionado y calculamos su _bounding box_ y su centro. La escala es entonces el inverso del máximo entre las relaciones de los lados del _bounding box_ y el tamaño correspondiente del svg (lo multiplicamos por 0.9 para dar un poco de espacio alrededor). A partir de ahí ya sólo tenemos que aplicar una transición con los valores que acabamos de calcular (también cambiamos un poco el estilo del polígono para indicar que está resaltado).
+
+La siguiente modificación que hay que hacer para mejorar la _usabilidad_ del la visualización es cambiar la forma en la que seleccionamos la varibale de interés. En lugar de ligar todas la variables al _dropdown_, vamos a hacer dos selectores: uno para el partido y otro para el año:
+
+```html
+  <select id="partido" class="select">
+    <option value="PRI" selected=true>PRI</option>
+    <option value="PAN">PAN</option>
+    <option value="PRD">PRD</option>
+  </select>
+  <select id="anho", class="select">
+    <option value="94">1994</option>
+    <option value="00">2000</option>
+    <option value="06">2006</option>
+    <option value="12">2012</option>
+  </select>
+
+```
+y reconstruir la variable de interés:
+
+```javascript
+select.on("change", function(d) {
+   var interes = "";
+   d3.selectAll(".select").each(function(d,i){ return interes+=this.value;});
+   hazMapa(interes);
+});
+```
+
+Ahora sí ya tenemos todo listo para agregar nuestra gráfica de barras. Para esto, en la función que maneja el clic sobre cada polígono vamos a llamar a una función que haga las barras. Esa parte es relativamente fácil, el problema es la forma en la que tenemos los datos. Si recuerdan el ejemplo final de las gráficas de barras, en las que leímos el csv, el json que regresa es un _array_ de filas, es decir, tenemos una lista de objetos cada uno de los cuales es un par con el nombre de la columna y el valor. Si exploran los datos que nos regresa leer el `topoJSON`no se parecen a eso, hay que procesarlos para poder usarlos. D3 provee una serie de operadores para manipular datos, equivalentes a las funcionalidades de R para hacer _melt_ o _pivot_, el problema es que como operan sobre objetos (JSON), son bastante más complicadas de entender. En el callback de `d3.json` vamos a manipular los datos para mandarlos a la gráfica de barras:
+
+
+```javascript
+features = topojson.feature(datos, datos.objects.elecciones);
+
+var propiedades = features.features.map(function(distrito) {return distrito.properties;});
+nest = d3.nest()
+  .key(function(d) { return d.CLAVEGEO; })
+  .rollup(function(values) {
+    return {
+      PRI94: +d3.values(values)[0]['PRI94'],
+      PRI00: +d3.values(values)[0]['PRI00'],
+      PRI06: +d3.values(values)[0]['PRI06'],
+      PRI12: +d3.values(values)[0]['PRI12'],
+      PAN94: +d3.values(values)[0]['PAN94'],
+      PAN00: +d3.values(values)[0]['PAN00'],
+      PAN06: +d3.values(values)[0]['PAN06'],
+      PAN12: +d3.values(values)[0]['PAN12'],
+      PRD94: +d3.values(values)[0]['PRD94'],
+      PRD00: +d3.values(values)[0]['PRD00'],
+      PRD06: +d3.values(values)[0]['PRD06'],
+      PRD12: +d3.values(values)[0]['PRD06']
+    };
+  })
+  .entries(propiedades);
+```
+
+Lo que tenemos es un objeto (del tipo `nest`) que nos permite seleccionar cada distrito por su clave (CVEGEO), este objeto lo guardamos en la variable global `nest` para poder usarlo en la función que va a hacer la gráfica.
+
 
 ```html
 <!DOCTYPE html>
 <head>
 <style>
-/*Los colores para las clases de poblaciÃ³n*/
+/*Los colores para las clases de población*/
   .q0 { fill:#fcc383; }
   .q1 { fill:#fc9f67; }
   .q2 { fill:#f4794e; }
@@ -479,7 +611,7 @@ El código completo queda así:
         });
         var interes = "";
            d3.selectAll(".select").each(function(d,i){ return interes+=this.value;});
-        hazMapa(interes);
+           hazMapa(interes);
     });
     
     function hazMapa(interes){
