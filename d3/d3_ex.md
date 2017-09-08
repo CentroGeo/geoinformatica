@@ -464,7 +464,7 @@ nest = d3.nest()
   .entries(propiedades);
 ```
 
-Lo que tenemos es un objeto (del tipo [`nest`](https://github.com/d3/d3/blob/master/API.md#nests)) que nos permite seleccionar cada distrito por su clave (CVEGEO), este objeto lo guardamos en la variable global `nest` para poder usarlo en la función que va a hacer la gráfica. Lo que estamos haciendo aquí es _promover_ la propiedad CLAVEGEO al nivel exterior del JSON y trear, como una lista de pares llave: valor, las variables que nos interesan. 
+Lo que tenemos es un objeto (del tipo [`nest`](https://github.com/d3/d3/blob/master/API.md#nests)) que nos permite seleccionar cada distrito por su clave (CVEGEO), este objeto lo guardamos en la variable global `nest` para poder usarlo en la función que va a hacer la gráfica. Lo que estamos haciendo aquí es _promover_ la propiedad CLAVEGEO al nivel exterior del JSON y trear, como una lista de pares llave: valor, las variables que nos interesan. En [esta](http://bl.ocks.org/shancarter/raw/4748131/) página pueden jugar con todas las funciones para manipular datos
 
 Entonces, ya que tenemos nuestros datos estructurados de la forma en que los queremos, podemos programar la lógica de la gráfica de barras. Lo primero que tenemos que hacer es, al recibir el año y los datos del distrito que queremos graficar, acomodarlos de los forma en la que nos sirven para hacer barras que se puedan actualizar fácilmente:
 
