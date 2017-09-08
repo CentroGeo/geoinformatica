@@ -364,7 +364,7 @@ Ahora ya estamos utilizando la selección `update` para actualizar los colores d
 
 Para terminar el ejercicio, vamos a añadir a nuestra visualización una gráfica de barras que mustre los resultados electorales en el distrito en que se haga clic, para el año seleccionado en la variable de interés. De los talleres anteriores ya sabemos cómo hacer gráficas de barras y actualizar sus datos, lo que no sabemos es como ligar las acciones entre los dos elementos. Antes de empezar, hay que hacer algunos arreglos para ayudar a la interacción del usuario con la visualización.
 
-Primero que nada, algunos distritos son muy pequeños, por lo que hacer clic directamente sobre ellos resultaría difícil. Una forma de arreglar este problema es implementar un _zoom_: al hacer clic en un distritu, la visualización debe centrarse en el distrito y acercarse a la extensión del mismo. Para hacer esto vamos a hacer una transición sobre el `translate` del mapa. Lo primero que necesitamos hacer es decirle a cada `path` que _escuche_ los clics:
+Primero que nada, algunos distritos son muy pequeños, por lo que hacer clic directamente sobre ellos resultaría difícil. Una forma de arreglar este problema es implementar un _zoom_: al hacer clic en un distrito, la visualización debe centrarse en él y acercarse su extensión. Para hacer esto vamos a hacer una transición sobre el `translate` del mapa. Lo primero que necesitamos hacer es decirle a cada `path` que _escuche_ los clics:
 
 ```javascript
  mapEnter.append("path")
@@ -408,7 +408,7 @@ Aquí ligamos el _clic_ a la función `clicked` que es donde vamos a programar l
 
 ```
 
-Lo primero que estamos haciendo es ver si el polígono en el que hicimos clic es el polígono q7ue ya tenemos seleccionado, de esta forma, volver a hacer clic sobre el polígono nos regresa a la extensión original (esa lógica está en la función `reset`). Luego le cambiamos la clase al polígono seleccionado y calculamos su _bounding box_ y su centro. La escala es entonces el inverso del máximo entre las relaciones de los lados del _bounding box_ y el tamaño correspondiente del svg (lo multiplicamos por 0.9 para dar un poco de espacio alrededor). A partir de ahí ya sólo tenemos que aplicar una transición con los valores que acabamos de calcular (también cambiamos un poco el estilo del polígono para indicar que está resaltado).
+Lo primero que estamos haciendo es ver si el polígono en el que hicimos clic es el polígono que ya tenemos seleccionado, de esta forma, volver a hacer clic sobre el polígono nos regresa a la extensión original (esa lógica está en la función `reset`). Luego le cambiamos la clase al polígono seleccionado y calculamos su _bounding box_ y su centro. La escala es entonces el inverso del máximo entre las relaciones de los lados del _bounding box_ y el tamaño correspondiente del svg (lo multiplicamos por 0.9 para dar un poco de espacio alrededor). A partir de ahí ya sólo tenemos que aplicar una transición con los valores que acabamos de calcular (también cambiamos el estilo del polígono para indicar que está resaltado).
 
 La siguiente modificación que hay que hacer para mejorar la _usabilidad_ del la visualización es cambiar la forma en la que seleccionamos la varibale de interés. En lugar de ligar todas la variables al _dropdown_, vamos a hacer dos selectores: uno para el partido y otro para el año:
 
@@ -436,7 +436,7 @@ select.on("change", function(d) {
 });
 ```
 
-Ahora sí ya tenemos todo listo para agregar nuestra gráfica de barras. Para esto, en la función que maneja el clic sobre cada polígono vamos a llamar a una función que haga las barras. Esa parte es relativamente fácil, el problema es la forma en la que tenemos los datos. Si recuerdan el ejemplo final de las gráficas de barras, en las que leímos el csv, el json que regresa es un _array_ de filas, es decir, tenemos una lista de objetos cada uno de los cuales es un par con el nombre de la columna y el valor. Si exploran los datos que nos regresa leer el `topoJSON`no se parecen a eso, hay que procesarlos para poder usarlos. D3 provee una serie de operadores para manipular datos, equivalentes a las funcionalidades de R para hacer _melt_ o _pivot_, el problema es que como operan sobre objetos (JSON), son bastante más complicadas de entender. En el callback de `d3.json` vamos a manipular los datos para mandarlos a la gráfica de barras:
+Ahora sí ya tenemos todo listo para agregar nuestra gráfica de barras. Para esto, en la función que maneja el clic sobre cada polígono vamos a llamar a una función que haga las barras. Esa parte es relativamente fácil, el problema es la forma en la que tenemos los datos. Si recuerdan el ejemplo final de las gráficas de barras, en las que leímos el csv, el json que regresa es un _array_ de filas, es decir, tenemos una lista de objetos cada uno de los cuales es un par con el nombre de la columna y el valor. Si exploran los datos que nos regresa leer el `topoJSON`, no se parecen a eso, hay que procesarlos para poder usarlos. D3 provee una serie de operadores para manipular datos, equivalentes a las funcionalidades de R para hacer _melt_ o _pivot_, el problema es que como operan sobre objetos (JSON), son bastante más complicadas de entender. En el callback de `d3.json` vamos a manipular los datos para mandarlos a la gráfica de barras:
 
 
 ```javascript
@@ -464,8 +464,92 @@ nest = d3.nest()
   .entries(propiedades);
 ```
 
-Lo que tenemos es un objeto (del tipo `nest`) que nos permite seleccionar cada distrito por su clave (CVEGEO), este objeto lo guardamos en la variable global `nest` para poder usarlo en la función que va a hacer la gráfica.
+Lo que tenemos es un objeto (del tipo [`nest`](https://github.com/d3/d3/blob/master/API.md#nests)) que nos permite seleccionar cada distrito por su clave (CVEGEO), este objeto lo guardamos en la variable global `nest` para poder usarlo en la función que va a hacer la gráfica. Lo que estamos haciendo aquí es _promover_ la propiedad CLAVEGEO al nivel exterior del JSON y trear, como una lista de pares llave: valor, las variables que nos interesan. 
 
+Entonces, ya que tenemos nuestros datos estructurados de la forma en que los queremos, podemos programar la lógica de la gráfica de barras. Lo primero que tenemos que hacer es, al recibir el año y los datos del distrito que queremos graficar, acomodarlos de los forma en la que nos sirven para hacer barras que se puedan actualizar fácilmente:
+
+```javascript
+function hazGrafica(anho, distrito){
+var partidos = ['PRI', 'PAN', 'PRD'];
+var datos = [];
+
+for (i = 0; i <= 2 ; i++){
+    c = {};
+    c["nombre"] = partidos[i];
+    c["valor"] = distrito[0].value[partidos[i]+anho];
+    datos.push(c);
+}
+```
+recibimos los datos que procesamos en el callback de `d3.json` y los acomodamos en una lista de objetos con el nombre del partido y el valor que le corresponde. Una vez que tenemos nuesros datos con la estructura que necesitamos, todo es ya igual que en el ejemplo que ya vimos, salvo que ahora vamos a tener que manejar bien la selección de `update`:
+
+
+```javascript
+function hazGrafica(anho, distrito){
+var partidos = ['PRI', 'PAN', 'PRD'];
+var datos = [];
+
+for (i = 0; i <= 2 ; i++){
+    c = {};
+    c["nombre"] = partidos[i];
+    c["valor"] = distrito[0].value[partidos[i]+anho];
+    datos.push(c);
+}
+
+var barWidth = 400,
+    barHeight = 86;
+var x = d3.scaleLinear()
+	  .range([0, barWidth])
+	  .domain([0, 100]);
+
+bar = barSvg.selectAll(".bar")
+	    .data(datos, function(d){ return d.nombre;});
+
+var barEnter = bar.enter()
+    .append("g")
+    .attr("class", "bar")
+    .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; })
+
+barEnter.append("rect")
+    .transition()
+    .duration(500)
+    .attr("width", function(d) { return x(d.valor); })
+    .attr("height", barHeight - 1)
+    .attr("fill", function(d) { return colores[d.nombre]; });
+
+
+
+barEnter.append("text")
+	.transition()
+	.duration(500)
+	.attr("x", function(d) { return x(d.valor) + 10; })
+	.attr("y", barHeight / 2)
+	.attr("dy", ".35em")
+	.text(function(d) { return d.valor });
+
+barEnter.append("text")
+	.transition()
+	.duration(500)
+	.attr("x", 10 )
+	.attr("y", barHeight / 2)
+	.attr("dy", ".35em")
+	.text(function(d) { return d.nombre });
+
+bar.select("rect")
+   .transition()
+   .duration(500)
+   .attr("width", function(d) { return x(d.valor); });
+
+bar.select("text")
+   .transition()
+   .duration(500)
+   .attr("x", function(d) { return x(d.valor) + 10; })
+   .text(function(d) { return d.valor; });
+
+}
+
+```
+
+Fíjense como manejamos por separado las actualizaciones de las barras y del texto. Esto lo podemos hacer porque NO actualizamos las variable `barEnter` y `bar`, entonces siempre hacen referencia a sus valores originales. El código final de la aplicación queda así: 
 
 ```html
 <!DOCTYPE html>
